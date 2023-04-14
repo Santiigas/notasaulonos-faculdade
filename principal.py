@@ -2,7 +2,7 @@ import sqlite3 as conector
 import random
 import string
 matricula = ''.join(random.choices(string.digits, k=12))
-conexao = conector.connect('C:/Users/alunoti/Desktop/meubanco2.db')
+conexao = conector.connect('C:/Users/Usuario/Documents/teste/meubanco2.db')
 cursor = conexao.cursor()
 
 try:
@@ -45,12 +45,13 @@ if escolha == 1:
         if len(nome_aluno) > 0 and nome_aluno.isalpha():
             try:
                 comando = '''INSERT INTO aluno VALUES (:cpf_aluno, :nome_aluno, :matricula);'''
-                cursor.execute(comando, {"cpf_aluno": "null", "nome_aluno": nome_aluno, "matricula": matricula, })
+                cursor.execute(comando, {"cpf_aluno": 122222, "nome_aluno": nome_aluno, "matricula": matricula, })
 
                 comando = '''INSERT INTO resultados VALUES (:nota1, :nota2, :nota3, :media),'''
                 cursor.execute(comando, {"nota1":nota1, "nota2":nota2, "nota3":nota3, "media": media})
 
-                conexao.commit()      
+                conexao.commit()
+                break    
             except Exception as erro:
                 print(erro)
         else:
@@ -58,7 +59,7 @@ if escolha == 1:
                   
 elif escolha == 2:
     try:
-        comando = '''DELETE FROM aluno where matricula = ?  ;'''
+        comando = '''DELETE FROM aluno WHERE matricula = ?  ;'''
         cursor.execute(comando, {"nome_aluno": "Santiago", })
     except Exception as erro:
         print(erro)
@@ -72,6 +73,8 @@ elif escolha == 3:
             try:
                 comando = '''UPDATE aluno SET nome_aluno = :nome_aluno ;'''
                 cursor.execute(comando, {"nome_aluno": nome_aluno })
+                break
+
             except Exception as erro:
                 print(erro)
         else:
