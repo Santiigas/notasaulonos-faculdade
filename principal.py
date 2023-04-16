@@ -67,14 +67,13 @@ elif escolha == 2:
 elif escolha == 3:
     while True:
         nome_aluno = str(input('Qual o nome do aluno?'))
+        cpf_aluno = float(input("Informe o CPF do aluno a ser deletado:"))
         if len(nome_aluno) > 0 and nome_aluno.isalpha():    
             try:
-                comando = '''UPDATE aluno SET nome_aluno = :nome_aluno;'''
-                cursor.execute(comando, {"nome_aluno": nome_aluno})
+                cursor.execute("UPDATE aluno SET nome_aluno = ? WHERE cpf_aluno = ?", (nome_aluno, cpf_aluno))
                 conexao.commit() 
                 print(">>> Dados atualizados com sucesso!")
                 break
-
             except Exception as erro:
                 print(erro)
         else:
@@ -84,3 +83,4 @@ else:
 
 cursor.close()
 conexao.close()
+
