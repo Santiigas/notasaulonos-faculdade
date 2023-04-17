@@ -3,31 +3,31 @@ import random
 import string
 matricula = ''.join(random.choices(string.digits, k=12))
 
-conexao = conector.connect('C:/Users/Usuario/Documents/teste/meubanco16.db')
+conexao = conector.connect('C:/Users/Usuario/Documents/teste/meubanco20.db')
 conexao.execute("PRAGMA foreign_keys = on")
 cursor = conexao.cursor()
 
 try:
     cursor.execute('''CREATE TABLE aluno (
-                    matricula  INTEGER   PRIMARY KEY,
-                    nome_aluno TEXT (50);''')
-
+                        matricula INTEGER PRIMARY KEY,
+                        nome_aluno TEXT (50));''')
 
     cursor.execute('''CREATE TABLE disciplina (
-                    id_disciplina        INTEGER   PRIMARY KEY,
-                    nome_disciplina   TEXT (40);''')
-
-                        
+                        id_disciplina INTEGER PRIMARY KEY,
+                        nome_disciplina TEXT (40));''')
+                            
     cursor.execute('''CREATE TABLE resultados (
-                    aluno_id       INTEGER REFERENCES aluno (matricula),
-                    disciplina_id INTEGER REFERENCES disciplina (id_disciplina),
-                    nota1                    REAL,
-                    nota2                    REAL,
-                    nota3                    REAL,
-                    media                    REAL);''')
+                        aluno_id INTEGER REFERENCES aluno (matricula),
+                        disciplina_id INTEGER REFERENCES disciplina (id_disciplina),
+                        nota1 REAL,
+                        nota2 REAL,
+                        nota3 REAL,
+                        media REAL);''')
+
 except Exception as erro:
     print(erro)
 while True:
+    matricula = ''.join(random.choices(string.digits, k=12))
     print('*-' * 15)
     print('---- Meu banco de dados ----')
     print('*-' * 15)
