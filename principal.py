@@ -23,7 +23,6 @@ try:
                         nota2 REAL,
                         nota3 REAL,
                         media REAL);''')
-
 except Exception as erro:
     print(erro)
 while True:
@@ -43,6 +42,7 @@ while True:
                         comando = '''INSERT INTO aluno VALUES (:matricula, :nome_aluno);'''
                         cursor.execute(comando, {"matricula": matricula, "nome_aluno": nome_aluno})
                         conexao.commit()
+
                         break    
                     except Exception as erro:
                         print(erro)
@@ -55,6 +55,7 @@ while True:
                     comando = '''INSERT INTO disciplina VALUES (:id_disciplina, :nome_disciplina);'''
                     cursor.execute(comando, {"id_disciplina": id_disciplina, "nome_disciplina": nome_disciplina})
                     conexao.commit()
+
                     break
                 except Exception as erro:
                         print(erro)
@@ -69,6 +70,9 @@ while True:
                 comando = '''INSERT INTO resultados VALUES (:aluno_id, :disciplina_id, :nota1, :nota2, :nota3, :media);'''
                 cursor.execute(comando, {"aluno_id": matricula, "disciplina_id": id_disciplina, "nota1": nota_1, "nota2": nota_2, "nota3": nota_3, "media": media})
                 conexao.commit()
+
+                print('><' * 12)
+                print(">>> Dados inseridos com sucesso!")
                 break
             except Exception as erro:
                 print(erro)
@@ -78,7 +82,12 @@ while True:
             try:
                 comando = '''DELETE FROM aluno WHERE matricula = :matricula;'''
                 cursor.execute(comando, {"matricula": matricula})
+
+                comando = '''DELETE FROM resultados WHERE aluno_id = :aluno_id;'''
+                cursor.execute(comando, {"aluno_id": matricula})
                 conexao.commit()
+
+                print('><' * 12)
                 print(">>> Dados apagados com sucesso!")
                 break
             except Exception as erro:
@@ -91,7 +100,9 @@ while True:
             if len(nome_aluno) > 0 and nome_aluno.isalpha():    
                 try:
                     cursor.execute("UPDATE aluno SET nome_aluno = ? WHERE matricula = ?", (nome_aluno, matricula))
-                    conexao.commit() 
+                    conexao.commit()
+
+                    print('><' * 12)
                     print(">>> Dados atualizados com sucesso!")
                     break
                 except Exception as erro:
