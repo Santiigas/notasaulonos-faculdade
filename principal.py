@@ -3,8 +3,8 @@ import random
 import string
 matricula = ''.join(random.choices(string.digits, k=12))
 
-conexao = conector.connect('C:/Users/Usuario/Documents/teste/meubanco20.db')
-conexao.execute("PRAGMA foreign_keys = on")
+conexao = conector.connect('C:/Users/Usuario/Documents/teste/meubanco8.db')
+#conexao.execute("PRAGMA foreign_keys = on")
 cursor = conexao.cursor()
 
 try:
@@ -28,6 +28,7 @@ except Exception as erro:
     print(erro)
 while True:
     matricula = ''.join(random.choices(string.digits, k=12))
+    id_disciplina = ''.join(random.choices(string.digits, k=6))
     print('*-' * 15)
     print('---- Meu banco de dados ----')
     print('*-' * 15)
@@ -42,12 +43,35 @@ while True:
                         comando = '''INSERT INTO aluno VALUES (:matricula, :nome_aluno);'''
                         cursor.execute(comando, {"matricula": matricula, "nome_aluno": nome_aluno})
                         conexao.commit()
-                        print(">>>> Dados adicionados com sucesso!")
                         break    
                     except Exception as erro:
                         print(erro)
             else:
-                print('>>> Valores digitados invalidos! Tente novamente')               
+                print('-- Nome invalido! Tente novamente')   
+        while True:
+            nome_disciplina = str(input('Nome da disciplina:'))
+            if len(nome_disciplina) > 0 and nome_disciplina.isalpha():
+                try:
+                    comando = '''INSERT INTO disciplina VALUES (:id_disciplina, :nome_disciplina);'''
+                    cursor.execute(comando, {"id_disciplina": id_disciplina, "nome_disciplina": nome_disciplina})
+                    conexao.commit()
+                    break
+                except Exception as erro:
+                        print(erro)
+            else:
+                print('-- Disciplina invalida! Tente novamente') 
+        while True:
+            nota_1 = float(input('Informe a 1ª nota: '))
+            nota_2 = float(input('Informe a 2ª nota: '))
+            nota_3 = float(input('Informe a 3ª nota: '))
+            media = (nota_1 + nota_2 + nota_3) / 3
+            try:
+                comando = '''INSERT INTO resultados VALUES (:aluno_id, :disciplina_id, :nota1, :nota2, :nota3, :media);'''
+                cursor.execute(comando, {"aluno_id": matricula, "disciplina_id": id_disciplina, "nota1": nota_1, "nota2": nota_2, "nota3": nota_3, "media": media})
+                conexao.commit()
+                break
+            except Exception as erro:
+                print(erro)
     elif escolha == 2:
         while True:
             matricula = float(input("Informe a matricula do aluno a ser deletado:"))
