@@ -45,6 +45,7 @@ class Aluno:
         conexao.commit()
         print(">>> Dados adicionados com sucesso!")
 
+
     def excluir_dados(matricula):
         comando = '''DELETE FROM aluno WHERE matricula = :matricula;'''
         cursor.execute(comando, {"matricula": matricula})
@@ -55,18 +56,44 @@ class Aluno:
         conexao.commit()
         print(">>> Dados apagados com sucesso!")
 
+
     def alterar_dados(matricula, nome_aluno):
         cursor.execute("UPDATE aluno SET nome_aluno = ? WHERE matricula = ?", (nome_aluno, matricula))
         conexao.commit()
         print(">>> Dados atualizados com sucesso!")
 
-    def recuperar_dados():
-        cursor.execute("SELECT * FROM aluno;")
+
+class BancoDeDados:
+    def todos_os_alunos():
+        cursor.execute("SELECT nome_aluno FROM aluno;")
         selecao_resultado = cursor.fetchall()
 
+        print('>>> Lista de todos os alunos:')
         for dado in selecao_resultado:
             print(dado)
+
+
+    def todos_as_disciplinas():
+        cursor.execute("SELECT nome_disciplina FROM disciplina;")
+        selecao_resultado = cursor.fetchall()
+
+        print('>>> Lista de todos os disciplinas')
+        for dado in selecao_resultado:
+            print(dado)
+
+
+    def all_medias_alunos():
+        #cursor.execute("SELECT media FROM resultados;")
+        #selecao_resultado = cursor.fetchall()
+
+        cursor.execute("SELECT aluno.nome_aluno, resultados.media "
+                       "FROM aluno JOIN resultados "
+                       "ON aluno.matricula = resultados.aluno_id ")
+        selecao_resultado = cursor.fetchall()
         
+        for dado in selecao_resultado:
+            print(dado)
+
         print(">>> Dados recuperados com sucesso!")
 
     def finalizar():
@@ -80,8 +107,8 @@ while True:
     print('*-' * 15)
     print('>>> O que você quer fazer?'
           '\n[ 1 ] - Inserir dados\n[ 2 ] - Excluir dados\n[ 3 ] - Alterar dados'
-          '\n[ 4 ] - Lista de todos os alunos\n[ 5 ] - Lista de todos os alunos\n[ 6 ] - Lista de todas as disciplinas'
-          '\n[ 7 ] - Medias de todos os aluno\n[ 8 ] - Notas alunos por disciplina')
+          '\n[ 4 ] - Lista de todos os alunos\n[ 5 ] - Lista de todos as disciplinas\n[ 6 ] - Lista todas as medias'
+          '\n[ 7 ] - aaaaan[ 8 ] - aaaaaa')
     print('*-' * 15)
     escolha = int(input('-- Escolha uma opção:'))
     if escolha == 1:
@@ -117,12 +144,25 @@ while True:
                 break
                 
     elif escolha == 4:
-        Aluno.recuperar_dados()
+        BancoDeDados.todos_os_alunos()
         break
 
     elif escolha == 5:
-        Aluno.finalizar()
+        BancoDeDados.todos_as_disciplinas()
         break
+
+    elif escolha == 6:
+        BancoDeDados.all_medias_alunos()
+        break
+
+    elif escolha == 7:
+        pass
+        break
+
+    elif escolha == 8:
+        pass
+        break
+
 
     else:
         print('Comando invalido! Tente Novamente')
