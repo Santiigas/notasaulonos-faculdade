@@ -83,18 +83,21 @@ class BancoDeDados:
 
 
     def all_medias_alunos():
-        #cursor.execute("SELECT media FROM resultados;")
-        #selecao_resultado = cursor.fetchall()
-
         cursor.execute("SELECT aluno.nome_aluno, resultados.media "
                        "FROM aluno JOIN resultados "
                        "ON aluno.matricula = resultados.aluno_id ")
         selecao_resultado = cursor.fetchall()
-        
+        print(">>> Lista de todos os alunos e suas médias!")
         for dado in selecao_resultado:
             print(dado)
 
-        print(">>> Dados recuperados com sucesso!")
+    def aluno_x_disciplina(nome):
+        cursor.execute("SELECT aluno.nome_aluno, resultados.media FROM aluno WHERE nome_aluno LIKE :nome", {"nome":nome})
+        selecao_resultado = cursor.fetchall()
+
+        print(f">>> Lista das notas de todos os alunos com o nome {nome}")
+        for dado in selecao_resultado:
+            print(dado)
 
     def finalizar():
         pass
@@ -108,7 +111,7 @@ while True:
     print('>>> O que você quer fazer?'
           '\n[ 1 ] - Inserir dados\n[ 2 ] - Excluir dados\n[ 3 ] - Alterar dados'
           '\n[ 4 ] - Lista de todos os alunos\n[ 5 ] - Lista de todos as disciplinas\n[ 6 ] - Lista todas as medias'
-          '\n[ 7 ] - aaaaan[ 8 ] - aaaaaa')
+          '\n[ 7 ] - Notas de um x aluno por x disciplina[ 8 ] - aaaaaa')
     print('*-' * 15)
     escolha = int(input('-- Escolha uma opção:'))
     if escolha == 1:
