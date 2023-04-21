@@ -63,23 +63,29 @@ class Aluno:
         print(">>> Dados atualizados com sucesso!")
 
 
+
+
 class BancoDeDados:
     def todos_os_alunos():
         cursor.execute("SELECT nome_aluno FROM aluno;")
         selecao_resultado = cursor.fetchall()
-
-        print('>>> Lista de todos os alunos:')
-        for dado in selecao_resultado:
-            print(dado)
+        if not selecao_resultado:
+            print(">>> Não há dados de alunos a serem visualizados!")
+        else:
+            print('>>> Lista de todos os alunos:')
+            for dado in selecao_resultado:
+                print(dado)
 
 
     def todos_as_disciplinas():
         cursor.execute("SELECT nome_disciplina FROM disciplina;")
         selecao_resultado = cursor.fetchall()
-
-        print('>>> Lista de todos os disciplinas')
-        for dado in selecao_resultado:
-            print(dado)
+        if not selecao_resultado:
+            print(">>> Não há dados de disciplinas a serem visualizados!")
+        else:
+            print('>>> Lista de todos as disciplinas')
+            for dado in selecao_resultado:
+                print(dado)
 
 
     def all_medias_alunos():
@@ -87,17 +93,15 @@ class BancoDeDados:
                        "FROM aluno JOIN resultados "
                        "ON aluno.matricula = resultados.aluno_id ")
         selecao_resultado = cursor.fetchall()
-        print(">>> Lista de todos os alunos e suas médias!")
-        for dado in selecao_resultado:
-            print(dado)
+        if not selecao_resultado:
+            print(">>> Não há dados de alunos e médias a serem visualizados!")
+        else:
+            print(">>> Lista de todos os alunos e suas médias!")
+            for dado in selecao_resultado:
+                print(dado)
 
     def aluno_x_disciplina(nome):
-        cursor.execute("SELECT aluno.nome_aluno, resultados.media FROM aluno WHERE nome_aluno LIKE :nome", {"nome":nome})
-        selecao_resultado = cursor.fetchall()
-
-        print(f">>> Lista das notas de todos os alunos com o nome {nome}")
-        for dado in selecao_resultado:
-            print(dado)
+        pass
 
     def finalizar():
         pass
