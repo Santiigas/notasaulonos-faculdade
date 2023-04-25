@@ -62,9 +62,6 @@ class Aluno:
         conexao.commit()
         print(">>> Dados atualizados com sucesso!")
 
-
-
-
 class BancoDeDados:
     def todos_os_alunos():
         cursor.execute("SELECT nome_aluno FROM aluno;")
@@ -100,78 +97,80 @@ class BancoDeDados:
             for dado in selecao_resultado:
                 print(dado)
 
-    def aluno_x_disciplina(nome):
-        pass
-
-    def finalizar():
-        pass
-
-while True:
-    matricula = ''.join(random.choices(string.digits, k=12))
-    id_disciplina = ''.join(random.choices(string.digits, k=6))
-    print('*-' * 15)
-    print('\n---- Meu banco de dados ----')
-    print('*-' * 15)
-    print('>>> O que você quer fazer?'
-          '\n[ 1 ] - Inserir dados\n[ 2 ] - Excluir dados\n[ 3 ] - Alterar dados'
-          '\n[ 4 ] - Lista de todos os alunos\n[ 5 ] - Lista de todos as disciplinas\n[ 6 ] - Lista todas as medias'
-          '\n[ 7 ] - Notas de um x aluno por x disciplina[ 8 ] - aaaaaa')
-    print('*-' * 15)
-    escolha = int(input('-- Escolha uma opção:'))
-    if escolha == 1:
-        while True:
-            nome_aluno = str(input('Qual o nome do aluno?'))
-            if len(nome_aluno) > 0 and nome_aluno.isalpha():
-                pass
-            else:
-                print('-- Nome invalido! Tente novamente')   
-            nome_disciplina = str(input('Nome da disciplina:'))
-            if len(nome_disciplina) > 0 and nome_disciplina.isalpha():
-                pass
-            else:
-                print('-- Disciplina invalida! Tente novamente')  
-            nota1 = float(input('Informe a 1ª nota: '))
-            nota2 = float(input('Informe a 2ª nota: '))
-            nota3 = float(input('Informe a 3ª nota: '))
+try:
+    while True:
+        matricula = ''.join(random.choices(string.digits, k=12))
+        id_disciplina = ''.join(random.choices(string.digits, k=6))
+        print('*-' * 15)
+        print('---- Meu banco de dados ----')
+        print('*-' * 15)
+        print('>>> O que você quer fazer?'
+            '\n[ 1 ] - Inserir dados\n[ 2 ] - Excluir dados\n[ 3 ] - Alterar dados'
+            '\n[ 4 ] - Lista de todos os alunos\n[ 5 ] - Lista de todos as disciplinas\n[ 6 ] - Lista todas as medias\n[ 7 ] - Sair')
+        escolha = int(input('>>> Escolha uma opção:'))
+        if escolha == 1:
+            while True:
+                nome_aluno = str(input('Qual o nome do aluno?')).strip()
+                if len(nome_aluno) > 0 and nome_aluno.isalpha():
+                    break
+                else:
+                    print('-- Nome invalido! Tente novamente')   
+            while True:
+                nome_disciplina = str(input('Nome da disciplina:')).strip()
+                if len(nome_disciplina) > 0 and nome_disciplina.isalpha():
+                    break
+                else:
+                    print('-- Disciplina invalida! Tente novamente')
+            while True:  
+                nota1 = float(input('Informe a 1ª nota: '))
+                nota2 = float(input('Informe a 2ª nota: '))
+                nota3 = float(input('Informe a 3ª nota: '))
+                if nota1 <= 10 and nota2 <= 10 and nota3 <= 10:
+                    break
+                else:
+                    print('--- Notas invalidas! Tente novamente')
             Aluno.inserir_dados(nome_aluno, matricula, id_disciplina, nome_disciplina, nota1, nota2, nota3)
-            break
 
-    elif escolha == 2:
-        while True:
-            matricula = float(input("Informe a matricula do aluno a ser deletado:"))
+        elif escolha == 2:
+            while True:
+                matricula = str(input("Informe a matricula do aluno a ser deletado:")).strip()
+                if len(matricula) == 12:
+                    break
+                else:
+                    print('-- Matricula invalida! Tente novamente')
             Aluno.excluir_dados(matricula)
+
+        elif escolha == 3:
+            while True:
+                matricula = str(input("Informe a matricula do aluno a ser alterado:")).strip()
+                if len(matricula) == 12:
+                    break
+                else:
+                    print('-- Matricula invalida! Tente novamente')
+            while True:
+                nome_aluno = str(input('Qual será o novo nome?')).strip()
+                if len(nome_aluno) > 0 and nome_aluno.isalpha():
+                    break
+                else:
+                    print('-- Nome invalido! Tente novamente')   
+            Aluno.alterar_dados(matricula, nome_aluno)
+                    
+        elif escolha == 4:
+            BancoDeDados.todos_os_alunos()
+
+        elif escolha == 5:
+            BancoDeDados.todos_as_disciplinas()
+   
+        elif escolha == 6:
+            BancoDeDados.all_medias_alunos()
+
+        elif escolha == 7:
+            print('>>> Obrigado por utilizar...Até a próxima!')
             break
+        else:
+            print('Comando invalido! Tente Novamente')
+except:
+    print("Ocorreu um erro")
 
-    elif escolha == 3:
-        while True:
-            matricula = float(input("Informe a matricula do aluno a ser alterado:"))
-            nome_aluno = str(input('Qual será o novo nome?'))
-            if len(nome_aluno) > 0 and nome_aluno.isalpha():
-                Aluno.alterar_dados(matricula, nome_aluno)
-                break
-                
-    elif escolha == 4:
-        BancoDeDados.todos_os_alunos()
-        break
-
-    elif escolha == 5:
-        BancoDeDados.todos_as_disciplinas()
-        break
-
-    elif escolha == 6:
-        BancoDeDados.all_medias_alunos()
-        break
-
-    elif escolha == 7:
-        pass
-        break
-
-    elif escolha == 8:
-        pass
-        break
-
-
-    else:
-        print('Comando invalido! Tente Novamente')
 cursor.close()
 conexao.close()
