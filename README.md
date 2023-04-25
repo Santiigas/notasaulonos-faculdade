@@ -1,3 +1,4 @@
 # notasaulonos-faculdade
- Projeto do segundo perido do curso de analise e desenvolvimen de sistemas. O objetiv final é criar uma menu para uma instituição de ensino onde  poderão ser aramezanadas nomes e notas de alunos ue cursam uma determinada disciplina, tudo isso conectado a um banco de dados.
-No momento o projeto ainda está em andamento 
+Projeto do segundo período do curso de análise e desenvolvimento de sistemas. O objetivo final é criar um menu para uma instituição de ensino onde  poderão ser armazenados nomes e notas de alunos que cursam uma determinada disciplina. Depois de recebidos, os dados são guardados em um banco de dados.
+No momento o projeto ainda está em andamento  
+

@@ -2,7 +2,7 @@ import sqlite3 as conector
 import random
 import string
 
-conexao = conector.connect('C:/Users/Usuario/Documents/teste/meubanco10.db')
+conexao = conector.connect('C:/Users/Usuario/Documents/teste/meubanco11.db')
 #conexao.execute("PRAGMA foreign_keys = on")
 cursor = conexao.cursor()
 
@@ -134,7 +134,7 @@ try:
         elif escolha == 2:
             while True:
                 matricula = str(input("Informe a matricula do aluno a ser deletado:")).strip()
-                if len(matricula) == 12:
+                if len(matricula) == 12 and matricula.isdigit():
                     break
                 else:
                     print('-- Matricula invalida! Tente novamente')
@@ -143,7 +143,7 @@ try:
         elif escolha == 3:
             while True:
                 matricula = str(input("Informe a matricula do aluno a ser alterado:")).strip()
-                if len(matricula) == 12:
+                if len(matricula) == 12 and matricula.isdigit():
                     break
                 else:
                     print('-- Matricula invalida! Tente novamente')
@@ -165,12 +165,17 @@ try:
             BancoDeDados.all_medias_alunos()
 
         elif escolha == 7:
+            print('<>' * 15)
             print('>>> Obrigado por utilizar...Até a próxima!')
             break
         else:
             print('Comando invalido! Tente Novamente')
-except:
-    print("Ocorreu um erro")
+except Exception as erro:
+    print("Ocorreu um erro:",erro)
 
 cursor.close()
 conexao.close()
+
+'''Salve professor. Ainda ficou faltando algumas verificações de dados, principalmente nas entradas das notas
+que estão bem precarias. Estou estudando umas funções para verificiar essa validação em float, tempo ta muito corrido
+Em relação a consulta com o banco de dados só consegui fazer os 3 primeiros exemplos no momento.'''
