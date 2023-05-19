@@ -6,26 +6,29 @@ conexao = conector.connect('C:/Users/Usuario/Documents/teste/meubanco11.db')
 #conexao.execute("PRAGMA foreign_keys = on")
 cursor = conexao.cursor()
 
-try:
-    cursor.execute('''CREATE TABLE aluno (
-                        matricula INTEGER PRIMARY KEY,
-                        nome_aluno TEXT (50));''')
+def CriarBancoDeDados():
+    try:
+        cursor.execute('''CREATE TABLE aluno (
+                            matricula INTEGER PRIMARY KEY,
+                            nome_aluno TEXT (50));''')
 
-    cursor.execute('''CREATE TABLE disciplina (
-                        id_disciplina INTEGER PRIMARY KEY,
-                        nome_disciplina TEXT (40));''')
-                            
-    cursor.execute('''CREATE TABLE resultados (
-                        aluno_id INTEGER REFERENCES aluno (matricula),
-                        disciplina_id INTEGER REFERENCES disciplina (id_disciplina),
-                        nota1 REAL,
-                        nota2 REAL,
-                        nota3 REAL,
-                        media REAL);''')
-except Exception as erro:
-    print(erro)
+        cursor.execute('''CREATE TABLE disciplina (
+                            id_disciplina INTEGER PRIMARY KEY,
+                            nome_disciplina TEXT (40));''')
+                                
+        cursor.execute('''CREATE TABLE resultados (
+                            aluno_id INTEGER REFERENCES aluno (matricula),
+                            disciplina_id INTEGER REFERENCES disciplina (id_disciplina),
+                            nota1 REAL,
+                            nota2 REAL,
+                            nota3 REAL,
+                            media REAL);''')
+    except Exception as erro:
+        print(erro)
 
 class Aluno:
+    matricula = ''.join(random.choices(string.digits, k=12))
+    id_disciplina = ''.join(random.choices(string.digits, k=6))
     def __init__(self, nome, matricula):
         self.nome = nome
         self.matricula = matricula
@@ -73,7 +76,6 @@ class BancoDeDados:
             for dado in selecao_resultado:
                 print(dado)
 
-
     def todos_as_disciplinas():
         cursor.execute("SELECT nome_disciplina FROM disciplina;")
         selecao_resultado = cursor.fetchall()
@@ -83,7 +85,6 @@ class BancoDeDados:
             print('>>> Lista de todos as disciplinas')
             for dado in selecao_resultado:
                 print(dado)
-
 
     def all_medias_alunos():
         cursor.execute("SELECT aluno.nome_aluno, resultados.media "
@@ -101,13 +102,6 @@ try:
     while True:
         matricula = ''.join(random.choices(string.digits, k=12))
         id_disciplina = ''.join(random.choices(string.digits, k=6))
-        print('*-' * 15)
-        print('---- Meu banco de dados ----')
-        print('*-' * 15)
-        print('>>> O que você quer fazer?'
-            '\n[ 1 ] - Inserir dados\n[ 2 ] - Excluir dados\n[ 3 ] - Alterar dados'
-            '\n[ 4 ] - Lista de todos os alunos\n[ 5 ] - Lista de todos as disciplinas\n[ 6 ] - Lista todas as medias\n[ 7 ] - Sair')
-        escolha = int(input('>>> Escolha uma opção:'))
         if escolha == 1:
             while True:
                 nome_aluno = str(input('Qual o nome do aluno?')).strip()
@@ -175,7 +169,3 @@ except Exception as erro:
 
 cursor.close()
 conexao.close()
-
-'''Salve professor. Ainda ficou faltando algumas verificações de dados, principalmente nas entradas das notas
-que estão bem precarias. Estou estudando umas funções para verificiar essa validação em float, tempo ta muito corrido
-Em relação a consulta com o banco de dados só consegui fazer os 3 primeiros exemplos no momento.'''
