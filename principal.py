@@ -164,6 +164,3 @@ except Exception as erro:
 cursor.close()
 conexao.close()
 
-
-#def Teste(x, y, z):
-#   print(f"nada {x}, {y}, {z}")

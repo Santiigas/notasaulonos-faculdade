@@ -3,8 +3,7 @@ from principal import *
 import random
 import string
 
-def Teste(x, y, z):
-   print(f"Nada = {x} e {y} e {z}")
+
 
 matricula = ''.join(random.choices(string.digits, k=12))
 id_disciplina = ''.join(random.choices(string.digits, k=6))
@@ -42,7 +41,7 @@ nota3 = Entry(janela, justify=CENTER)
 nota3.place(width=70, height=22, x=263, y=210)
 
 #Botao
-botao1 = Button(janela, text="Salvar", relief='flat', comand=Aluno.inserir_dados(nome_aluno, matricula, id_disciplina, nome_disciplina, float(nota1.get()), float(nota2.get()), float(nota3.get())))
+botao1 = Button(janela, text="Salvar", relief='flat')
 botao1.place(width=102, height=33, x=138, y=252)
 
 #função para mapeamento da aréa
