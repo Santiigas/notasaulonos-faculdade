@@ -1,9 +1,6 @@
 import sqlite3 as conector
-import random
-import string
 
 conexao = conector.connect('C:/Users/Usuario/Documents/teste/meubanco11.db')
-#conexao.execute("PRAGMA foreign_keys = on")
 cursor = conexao.cursor()
 
 def CriarBancoDeDados():
@@ -27,8 +24,6 @@ def CriarBancoDeDados():
         print(erro)
 
 class Aluno:
-    matricula = ''.join(random.choices(string.digits, k=12))
-    id_disciplina = ''.join(random.choices(string.digits, k=6))
     def __init__(self, nome, matricula):
         self.nome = nome
         self.matricula = matricula
@@ -97,12 +92,11 @@ class BancoDeDados:
             print(">>> Lista de todos os alunos e suas médias!")
             for dado in selecao_resultado:
                 print(dado)
-
+'''
 try:
     while True:
         matricula = ''.join(random.choices(string.digits, k=12))
         id_disciplina = ''.join(random.choices(string.digits, k=6))
-        if escolha == 1:
             while True:
                 nome_aluno = str(input('Qual o nome do aluno?')).strip()
                 if len(nome_aluno) > 0 and nome_aluno.isalpha():
@@ -166,6 +160,10 @@ try:
             print('Comando invalido! Tente Novamente')
 except Exception as erro:
     print("Ocorreu um erro:",erro)
-
+'''
 cursor.close()
 conexao.close()
+
+
+#def Teste(x, y, z):
+#   print(f"nada {x}, {y}, {z}")

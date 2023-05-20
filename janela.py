@@ -3,6 +3,9 @@ from principal import *
 import random
 import string
 
+def Teste(x, y, z):
+   print(f"Nada = {x} e {y} e {z}")
+
 matricula = ''.join(random.choices(string.digits, k=12))
 id_disciplina = ''.join(random.choices(string.digits, k=6))
 
@@ -23,25 +26,24 @@ labelfundo.place(x=0, y=0)
 #Adicionar Aluno ------------------------------------
 
 #Entradas
-nome = Entry(janela)
-nome.place(width=231, height=22, x=102, y=135)
+nome_aluno = Entry(janela, justify=CENTER)
+nome_aluno.place(width=231, height=22, x=102, y=135)
 
-disciplina = Entry(janela)
-disciplina.place(width=202, height=22, x=131, y=173)
+nome_disciplina = Entry(janela, justify=CENTER)
+nome_disciplina.place(width=202, height=22, x=131, y=173)
 
-nota1 = Entry(janela)
+nota1 = Entry(janela, justify=CENTER)
 nota1.place(width=70, height=22, x=98, y=210)
 
-nota2 = Entry(janela)
+nota2 = Entry(janela, justify=CENTER)
 nota2.place(width=70, height=22, x=181, y=210)
 
-nota3 = Entry(janela)
+nota3 = Entry(janela, justify=CENTER)
 nota3.place(width=70, height=22, x=263, y=210)
 
 #Botao
-botao1 = Button(janela, text="Salvar", relief='flat', command=lambda: Aluno.inserir_dados(nome, matricula, id_disciplina, disciplina, nota1, nota2, nota3))
+botao1 = Button(janela, text="Salvar", relief='flat', comand=Aluno.inserir_dados(nome_aluno, matricula, id_disciplina, nome_disciplina, float(nota1.get()), float(nota2.get()), float(nota3.get())))
 botao1.place(width=102, height=33, x=138, y=252)
-
 
 #função para mapeamento da aréa
 def clique_mouse(retorno):
