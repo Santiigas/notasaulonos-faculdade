@@ -1,4 +1,7 @@
 import sqlite3 as conector
+from tkinter import *
+import random
+import string
 
 conexao = conector.connect('C:/Users/Usuario/Documents/teste/meubanco11.db')
 cursor = conexao.cursor()
@@ -23,13 +26,34 @@ def CriarBancoDeDados():
     except Exception as erro:
         print(erro)
 
+def PegarDadosAlunos():
+    matricula = ''.join(random.choices(string.digits, k=12))
+    id_disciplina = ''.join(random.choices(string.digits, k=6))
+
+    nome= str(entrada_nome_aluno.get())
+    disciplina = str(entrada_nome_disciplina.get())
+    nota1 = float(entrada_nota1.get())
+    nota2 = float(entrada_nota2.get())
+    nota3 = float(entrada_nota3.get())
+    media = (nota1 + nota2 + nota3) / 3
+    if len(nome) > 0 and nome.isalpha():
+        if len(disciplina) > 0 and disciplina.isalpha():
+            if nota1 <= 10 and nota2 <= 10 and nota3 <= 10:
+                 Aluno.inserir_dados(nome, matricula, id_disciplina, disciplina, nota1, nota2, nota3, media)
+                 mensagem['text'] = 'Dados adicionados com sucesso!'
+            else:
+                mensagem['text'] = 'Notas invalidas! Tente novamente'
+        else:
+            mensagem['text'] = 'Disciplina invalida! Tente novamente'
+    else:
+        mensagem['text'] = 'Nome invalido! Tente novamente'
+
 class Aluno:
-    def __init__(self, nome, matricula):
-        self.nome = nome
+    def __init__(self, nome_aluno, matricula, id_disciplina, nome_disciplina, nota1, nota2, nota3, media):
+        self.nome_aluno = nome_aluno
         self.matricula = matricula
 
-    def inserir_dados(nome_aluno, matricula, id_disciplina, nome_disciplina, nota1, nota2, nota3):
-        media = (nota1 + nota2 + nota3) / 3
+    def inserir_dados(nome_aluno, matricula, id_disciplina, nome_disciplina, nota1, nota2, nota3, media):
         comando = '''INSERT INTO aluno VALUES (:matricula, :nome_aluno);'''
         cursor.execute(comando, {"matricula": matricula, "nome_aluno": nome_aluno})
         conexao.commit()
@@ -43,7 +67,6 @@ class Aluno:
         conexao.commit()
         print(">>> Dados adicionados com sucesso!")
 
-
     def excluir_dados(matricula):
         comando = '''DELETE FROM aluno WHERE matricula = :matricula;'''
         cursor.execute(comando, {"matricula": matricula})
@@ -53,7 +76,6 @@ class Aluno:
         cursor.execute(comando, {"aluno_id": matricula})
         conexao.commit()
         print(">>> Dados apagados com sucesso!")
-
 
     def alterar_dados(matricula, nome_aluno):
         cursor.execute("UPDATE aluno SET nome_aluno = ? WHERE matricula = ?", (nome_aluno, matricula))
@@ -161,6 +183,56 @@ try:
 except Exception as erro:
     print("Ocorreu um erro:",erro)
 '''
+
+#criação da janela
+janela = Tk()
+janela.title("Laçamento de notas de alunos")
+#master.iconbitmap(default="icone.ico")
+janela.geometry("1100x550+155+70")
+janela.wm_resizable(width=False, height=False)
+
+#importação da imagem de fundo
+fundo_imagem = PhotoImage(file="modelo.png")
+
+#Label
+labelfundo = Label(janela, image=fundo_imagem)
+labelfundo.place(x=0, y=0)
+
+#Adicionar Aluno ------------------------------------
+
+#Entradas
+entrada_nome_aluno = Entry(janela, justify=CENTER)
+entrada_nome_aluno.place(width=231, height=22, x=102, y=135)
+
+entrada_nome_disciplina = Entry(janela, justify=CENTER)
+entrada_nome_disciplina.place(width=202, height=22, x=131, y=173)
+
+entrada_nota1 = Entry(janela, justify=CENTER)
+entrada_nota1.place(width=70, height=22, x=98, y=210)
+
+entrada_nota2 = Entry(janela, justify=CENTER)
+entrada_nota2.place(width=70, height=22, x=181, y=210)
+
+entrada_nota3 = Entry(janela, justify=CENTER)
+entrada_nota3.place(width=70, height=22, x=263, y=210)
+
+#Botao
+botao1 = Button(janela, text="Salvar", relief='flat', command=lambda:PegarDadosAlunos())
+botao1.place(width=102, height=33, x=138, y=252)
+
+#Retono das telas
+mensagem = Label(janela, text='000', font="Arial 17", relief='flat', fg='#020304', bg='#ededed')
+mensagem.place(width=400, height=25, x=530, y=420)
+
+#função para mapeamento da aréa -------------------------------------------------
+def clique_mouse(retorno):
+    print(f'X: {retorno.x} | Y:{retorno.y} Geo: {janela.geometry()}')
+
+#eventos - mapear area do pc
+#master.bind("<Button-1>", clique_mouse)
+
+janela.mainloop()
+
+
 cursor.close()
 conexao.close()
-
