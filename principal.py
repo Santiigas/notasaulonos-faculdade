@@ -26,28 +26,49 @@ def CriarBancoDeDados():
     except Exception as erro:
         print(erro)
 
-def PegarDadosAlunos():
-    matricula = ''.join(random.choices(string.digits, k=12))
-    id_disciplina = ''.join(random.choices(string.digits, k=6))
-
-    nome= str(entrada_nome_aluno.get())
-    disciplina = str(entrada_nome_disciplina.get())
-    nota1 = float(entrada_nota1.get())
-    nota2 = float(entrada_nota2.get())
-    nota3 = float(entrada_nota3.get())
-    media = (nota1 + nota2 + nota3) / 3
-    if len(nome) > 0 and nome.isalpha():
-        if len(disciplina) > 0 and disciplina.isalpha():
-            if nota1 <= 10 and nota2 <= 10 and nota3 <= 10:
-                 Aluno.inserir_dados(nome, matricula, id_disciplina, disciplina, nota1, nota2, nota3, media)
-                 mensagem['text'] = 'Dados adicionados com sucesso!'
+def PegarDadosAlunos(parametro):
+    try:
+        matricula = ''.join(random.choices(string.digits, k=12))
+        id_disciplina = ''.join(random.choices(string.digits, k=6))
+        if parametro == 1:
+            nome= str(entrada_nome_aluno.get())
+            disciplina = str(entrada_nome_disciplina.get())
+            nota1 = float(entrada_nota1.get())
+            nota2 = float(entrada_nota2.get())
+            nota3 = float(entrada_nota3.get())
+            media = (nota1 + nota2 + nota3) / 3
+            if len(nome) > 0 and nome.isalpha():
+                if len(disciplina) > 0 and disciplina.isalpha():
+                    if nota1 <= 10 and nota2 <= 10 and nota3 <= 10:
+                        Aluno.inserir_dados(nome, matricula, id_disciplina, disciplina, nota1, nota2, nota3, media)
+                        mensagem['text'] = 'Dados inseridos com sucesso!' 
+                    else:
+                        mensagem['text'] = 'Notas invalidas! Tente novamente'
+                else:
+                    mensagem['text'] = 'Disciplina invalida! Tente novamente'
             else:
-                mensagem['text'] = 'Notas invalidas! Tente novamente'
-        else:
-            mensagem['text'] = 'Disciplina invalida! Tente novamente'
-    else:
-        mensagem['text'] = 'Nome invalido! Tente novamente'
-
+                mensagem['text'] = 'Nome invalido! Tente novamente'
+        elif parametro == 2:
+            matricula_alterar= str(entrada_matricula.get())
+            novo_nome = str(entrada_novo_nome .get())
+            if len(matricula_alterar) == 12 and matricula_alterar.isdigit():
+                if len(novo_nome) > 0 and novo_nome.isalpha():
+                    Aluno.alterar_dados(matricula_alterar, novo_nome)
+                    mensagem['text'] = 'Dados alterados com sucesso!'
+                else:
+                    mensagem['text'] = 'Novo nome invalido'
+            else:
+                mensagem['text'] = 'Matricula invalida'
+        elif parametro == 3:
+            matricula_delete = str(entrada_matricula_delete.get())
+            if len(matricula_delete) == 12 and matricula_delete.isdigit():
+                Aluno.excluir_dados(matricula_delete)
+                mensagem['text'] = 'Dados deletas com sucesso!'
+            else:
+                mensagem['text'] = 'Matricula invalida!'
+    except Exception as erro:
+        print("Ocorreu um erro:",erro)
+    
 class Aluno:
     def __init__(self, nome_aluno, matricula, id_disciplina, nome_disciplina, nota1, nota2, nota3, media):
         self.nome_aluno = nome_aluno
@@ -114,75 +135,6 @@ class BancoDeDados:
             print(">>> Lista de todos os alunos e suas médias!")
             for dado in selecao_resultado:
                 print(dado)
-'''
-try:
-    while True:
-        matricula = ''.join(random.choices(string.digits, k=12))
-        id_disciplina = ''.join(random.choices(string.digits, k=6))
-            while True:
-                nome_aluno = str(input('Qual o nome do aluno?')).strip()
-                if len(nome_aluno) > 0 and nome_aluno.isalpha():
-                    break
-                else:
-                    print('-- Nome invalido! Tente novamente')   
-            while True:
-                nome_disciplina = str(input('Nome da disciplina:')).strip()
-                if len(nome_disciplina) > 0 and nome_disciplina.isalpha():
-                    break
-                else:
-                    print('-- Disciplina invalida! Tente novamente')
-            while True:  
-                nota1 = float(input('Informe a 1ª nota: '))
-                nota2 = float(input('Informe a 2ª nota: '))
-                nota3 = float(input('Informe a 3ª nota: '))
-                if nota1 <= 10 and nota2 <= 10 and nota3 <= 10:
-                    break
-                else:
-                    print('--- Notas invalidas! Tente novamente')
-            Aluno.inserir_dados(nome_aluno, matricula, id_disciplina, nome_disciplina, nota1, nota2, nota3)
-
-        elif escolha == 2:
-            while True:
-                matricula = str(input("Informe a matricula do aluno a ser deletado:")).strip()
-                if len(matricula) == 12 and matricula.isdigit():
-                    break
-                else:
-                    print('-- Matricula invalida! Tente novamente')
-            Aluno.excluir_dados(matricula)
-
-        elif escolha == 3:
-            while True:
-                matricula = str(input("Informe a matricula do aluno a ser alterado:")).strip()
-                if len(matricula) == 12 and matricula.isdigit():
-                    break
-                else:
-                    print('-- Matricula invalida! Tente novamente')
-            while True:
-                nome_aluno = str(input('Qual será o novo nome?')).strip()
-                if len(nome_aluno) > 0 and nome_aluno.isalpha():
-                    break
-                else:
-                    print('-- Nome invalido! Tente novamente')   
-            Aluno.alterar_dados(matricula, nome_aluno)
-                    
-        elif escolha == 4:
-            BancoDeDados.todos_os_alunos()
-
-        elif escolha == 5:
-            BancoDeDados.todos_as_disciplinas()
-   
-        elif escolha == 6:
-            BancoDeDados.all_medias_alunos()
-
-        elif escolha == 7:
-            print('<>' * 15)
-            print('>>> Obrigado por utilizar...Até a próxima!')
-            break
-        else:
-            print('Comando invalido! Tente Novamente')
-except Exception as erro:
-    print("Ocorreu um erro:",erro)
-'''
 
 #criação da janela
 janela = Tk()
@@ -217,22 +169,52 @@ entrada_nota3 = Entry(janela, justify=CENTER)
 entrada_nota3.place(width=70, height=22, x=263, y=210)
 
 #Botao
-botao1 = Button(janela, text="Salvar", relief='flat', command=lambda:PegarDadosAlunos())
+botao1 = Button(janela, text="Salvar", relief='flat', command=lambda:PegarDadosAlunos(1))
 botao1.place(width=102, height=33, x=138, y=252)
 
-#Retono das telas
+#Alterar aluno ------------------------------------
+
+#Entradas
+entrada_matricula = Entry(janela, justify=CENTER)
+entrada_matricula.place(width=202, height=22, x=492, y=171)
+
+entrada_novo_nome = Entry(janela, justify=CENTER)
+entrada_novo_nome.place(width=187, height=22, x=506, y=210)
+
+#Botao
+botao2 = Button(janela, text="Alterar", relief='flat', command=lambda:PegarDadosAlunos(2))
+botao2.place(width=102, height=33, x=500, y=252)
+
+#Excluir alunos ------------------------------------
+
+#Entradas
+entrada_matricula_delete = Entry(janela, justify=CENTER)
+entrada_matricula_delete.place(width=205, height=22, x=850, y=173)
+
+entrada_motivo = Entry(janela, justify=CENTER)
+entrada_motivo.place(width=225, height=22, x=831, y=210)
+
+#Botao
+botao3 = Button(janela, text="Excluir", relief='flat', command=lambda:PegarDadosAlunos(3))
+botao3.place(width=102, height=33, x=861, y=252)
+
+#Consultas ------------------------------------------
+
+botao_consultar_alunos = Button(janela, text="Alunos", relief='flat', command=lambda:PegarDadosAlunos(4))
+botao_consultar_alunos.place(width=232, height=32, x=72, y=367)
+
+botao_consultar_disciplinas = Button(janela, text="Disciplinas", relief='flat', command=lambda:PegarDadosAlunos(5))
+botao_consultar_disciplinas.place(width=232, height=32, x=72, y=421)
+
+botao_consultar_medias = Button(janela, text="Disciplinas", relief='flat', command=lambda:PegarDadosAlunos(6))
+botao_consultar_medias.place(width=232, height=32, x=72, y=474)
+
+#--------------------------------------------------------------
+#Mensagens na tela
 mensagem = Label(janela, text='000', font="Arial 17", relief='flat', fg='#020304', bg='#ededed')
 mensagem.place(width=400, height=25, x=530, y=420)
 
-#função para mapeamento da aréa -------------------------------------------------
-def clique_mouse(retorno):
-    print(f'X: {retorno.x} | Y:{retorno.y} Geo: {janela.geometry()}')
-
-#eventos - mapear area do pc
-#master.bind("<Button-1>", clique_mouse)
 
 janela.mainloop()
-
-
 cursor.close()
 conexao.close()
