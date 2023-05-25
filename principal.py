@@ -63,9 +63,15 @@ def PegarDadosAlunos(parametro):
             matricula_delete = str(entrada_matricula_delete.get())
             if len(matricula_delete) == 12 and matricula_delete.isdigit():
                 Aluno.excluir_dados(matricula_delete)
-                mensagem['text'] = 'Dados deletas com sucesso!'
+                mensagem['text'] = 'Dados deletados com sucesso!'
             else:
                 mensagem['text'] = 'Matricula invalida!'
+        elif parametro == 4:
+            BancoDeDados.todos_os_alunos()
+        elif parametro == 5:
+            BancoDeDados.todos_as_disciplinas()
+        elif parametro == 6:
+            BancoDeDados.all_medias_alunos()
     except Exception as erro:
         print("Ocorreu um erro:",erro)
     
@@ -111,8 +117,16 @@ class BancoDeDados:
             print(">>> Não há dados de alunos a serem visualizados!")
         else:
             print('>>> Lista de todos os alunos:')
+            '''O banco de dados retorna uma lista com varias tuplas.
+               Cada tupla contem o nome de um aluno.
+               O que fiz abaixo foi transformar essas tuplas em listas.
+               Ou seja: Lista do banco de dados -contem- varias lista com um nome do aluno cada
+               No fim retornamos os dados, ou seja, somente o nome do aluno
+            '''
             for dado in selecao_resultado:
-                print(dado)
+                dados_lista = list(dado)
+                for aluno in dados_lista:
+                    print(aluno)
 
     def todos_as_disciplinas():
         cursor.execute("SELECT nome_disciplina FROM disciplina;")
@@ -122,7 +136,9 @@ class BancoDeDados:
         else:
             print('>>> Lista de todos as disciplinas')
             for dado in selecao_resultado:
-                print(dado)
+                dados_lista = list(dado)
+                for disciplina in dados_lista:
+                    print(disciplina)
 
     def all_medias_alunos():
         cursor.execute("SELECT aluno.nome_aluno, resultados.media "
@@ -132,9 +148,10 @@ class BancoDeDados:
         if not selecao_resultado:
             print(">>> Não há dados de alunos e médias a serem visualizados!")
         else:
-            print(">>> Lista de todos os alunos e suas médias!")
+            print('>>> Lista de todos as disciplinas')
             for dado in selecao_resultado:
-                print(dado)
+                aluno, media = dado
+                print(f"Aluno: {aluno} | Média: {media}")
 
 #criação da janela
 janela = Tk()
@@ -206,7 +223,7 @@ botao_consultar_alunos.place(width=232, height=32, x=72, y=367)
 botao_consultar_disciplinas = Button(janela, text="Disciplinas", relief='flat', command=lambda:PegarDadosAlunos(5))
 botao_consultar_disciplinas.place(width=232, height=32, x=72, y=421)
 
-botao_consultar_medias = Button(janela, text="Disciplinas", relief='flat', command=lambda:PegarDadosAlunos(6))
+botao_consultar_medias = Button(janela, text="Médias", relief='flat', command=lambda:PegarDadosAlunos(6))
 botao_consultar_medias.place(width=232, height=32, x=72, y=474)
 
 #--------------------------------------------------------------
