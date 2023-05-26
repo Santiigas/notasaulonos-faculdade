@@ -68,10 +68,13 @@ def PegarDadosAlunos(parametro):
                 mensagem['text'] = 'Matricula invalida!'
         elif parametro == 4:
             BancoDeDados.todos_os_alunos()
+            mensagem['text'] = 'Dados de todos os alunos retornados!'
         elif parametro == 5:
             BancoDeDados.todos_as_disciplinas()
+            mensagem['text'] = 'Dados de todas as disciplinas retornados!'
         elif parametro == 6:
             BancoDeDados.all_medias_alunos()
+            mensagem['text'] = 'Dados de todas os alunos e medias retornados!'
     except Exception as erro:
         print("Ocorreu um erro:",erro)
     
@@ -111,48 +114,64 @@ class Aluno:
 
 class BancoDeDados:
     def todos_os_alunos():
-        cursor.execute("SELECT nome_aluno FROM aluno;")
-        selecao_resultado = cursor.fetchall()
-        if not selecao_resultado:
-            print(">>> Não há dados de alunos a serem visualizados!")
-        else:
-            print('>>> Lista de todos os alunos:')
-            '''O banco de dados retorna uma lista com varias tuplas.
-               Cada tupla contem o nome de um aluno.
-               O que fiz abaixo foi transformar essas tuplas em listas.
-               Ou seja: Lista do banco de dados -contem- varias lista com um nome do aluno cada
-               No fim retornamos os dados, ou seja, somente o nome do aluno
-            '''
-            for dado in selecao_resultado:
-                dados_lista = list(dado)
-                for aluno in dados_lista:
-                    print(aluno)
-
+        try:
+            cursor.execute("SELECT nome_aluno FROM aluno;")
+            selecao_resultado = cursor.fetchall()
+            if not selecao_resultado:
+                print(">>> Não há dados de alunos a serem visualizados!")
+            else:
+                print('>>> Lista de todos os alunos:')
+                '''O banco de dados retorna uma lista com varias tuplas.
+                Cada tupla contem o nome de um aluno.
+                O que fiz abaixo foi transformar essas tuplas em listas.
+                Ou seja: Lista do banco de dados -contem- varias lista com um nome do aluno cada
+                No fim retornamos os dados, ou seja, somente o nome do aluno
+                '''
+                arquivo = open("todas_os_alunos.txt","w")
+                arquivo.write(">>> Lista de todos os alunos:\n")
+                for dado in selecao_resultado:
+                    dados_lista = list(dado)
+                    for aluno in dados_lista:
+                        arquivo.write(aluno)
+                        arquivo.write("\n")
+                arquivo.close()
+        except Exception as erro:
+            print(erro)
     def todos_as_disciplinas():
-        cursor.execute("SELECT nome_disciplina FROM disciplina;")
-        selecao_resultado = cursor.fetchall()
-        if not selecao_resultado:
-            print(">>> Não há dados de disciplinas a serem visualizados!")
-        else:
-            print('>>> Lista de todos as disciplinas')
-            for dado in selecao_resultado:
-                dados_lista = list(dado)
-                for disciplina in dados_lista:
-                    print(disciplina)
-
+        try:
+            cursor.execute("SELECT nome_disciplina FROM disciplina;")
+            selecao_resultado = cursor.fetchall()
+            if not selecao_resultado:
+                print(">>> Não há dados de disciplinas a serem visualizados!")
+            else:
+                arquivo = open("todas_as_disciplinas.txt","w")
+                arquivo.write(">>> Lista de todos as disciplinas:\n")
+                for dado in selecao_resultado:
+                    dados_lista = list(dado)
+                    for disciplina in dados_lista:
+                        arquivo.write(disciplina)
+                        arquivo.write("\n")
+                arquivo.close()
+        except Exception as erro:
+            print(erro)
     def all_medias_alunos():
-        cursor.execute("SELECT aluno.nome_aluno, resultados.media "
-                       "FROM aluno JOIN resultados "
-                       "ON aluno.matricula = resultados.aluno_id ")
-        selecao_resultado = cursor.fetchall()
-        if not selecao_resultado:
-            print(">>> Não há dados de alunos e médias a serem visualizados!")
-        else:
-            print('>>> Lista de todos as disciplinas')
-            for dado in selecao_resultado:
-                aluno, media = dado
-                print(f"Aluno: {aluno} | Média: {media}")
-
+        try:
+            cursor.execute("SELECT aluno.nome_aluno, resultados.media "
+                        "FROM aluno JOIN resultados "
+                        "ON aluno.matricula = resultados.aluno_id ")
+            selecao_resultado = cursor.fetchall()
+            if not selecao_resultado:
+                print(">>> Não há dados de alunos e médias a serem visualizados!")
+            else:
+                arquivo = open("todas_as_medias_e_alunos.txt","w")
+                arquivo.write(">>> Lista de todos os alunos e suas medias:\n")
+                for dado in selecao_resultado:
+                    aluno, media = dado
+                    arquivo.write(f"Aluno: {aluno} | Media: {media}")
+                    arquivo.write("\n")
+            arquivo.close()
+        except Exception as erro:
+            print(erro)
 #criação da janela
 janela = Tk()
 janela.title("Laçamento de notas de alunos")
@@ -229,8 +248,7 @@ botao_consultar_medias.place(width=232, height=32, x=72, y=474)
 #--------------------------------------------------------------
 #Mensagens na tela
 mensagem = Label(janela, text='000', font="Arial 17", relief='flat', fg='#020304', bg='#ededed')
-mensagem.place(width=400, height=25, x=530, y=420)
-
+mensagem.place(width=500, height=25, x=500, y=420)
 
 janela.mainloop()
 cursor.close()
