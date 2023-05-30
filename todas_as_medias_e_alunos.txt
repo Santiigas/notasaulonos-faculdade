@@ -1,0 +1,18 @@
+>>> Lista de todos os alunos e suas medias:
+Aluno: Santiago | Media: 9.633333333333333
+Aluno: Vilma | Media: 0.0
+Aluno: Manoel | Media: 6.666666666666667
+Aluno: Helena | Media: 10.0
+Aluno: Paulo | Media: 9.166666666666666
+Aluno: SantiagoOliveira | Media: 10.0
+Aluno: SantiagoOliveira | Media: 10.0
+Aluno: Santiago Oliveira | Media: 10.0
+Aluno: 555 | Media: 1.3333333333333333
+Aluno: Santiago Oliveira Fernandes | Media: 10.0
+Aluno: Santiago Oliveira    Fernandes   x | Media: 10.0
+Aluno: Santiago Oliveira Fernandes | Media: 10.0
+Aluno: Santiago Oliveira Fernande#s | Media: 10.0
+Aluno: 11111 | Media: 2.3333333333333335
+Aluno: 999 | Media: 5.0
+Aluno: 999 | Media: 3.3333333333333335
+Aluno: Doka | Media: 10.0

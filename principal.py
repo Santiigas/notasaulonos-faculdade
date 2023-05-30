@@ -6,7 +6,9 @@ import string
 
 conexao = conector.connect('C:/Users/Usuario/Documents/teste/meubanco11.db')
 cursor = conexao.cursor()
+
 lista_disciplinas = ["Português", "História", "Biologia", "Literatura", "Química", "Matemática", "Física", "Inglês", "Espanhol" ]
+motivo = ["Trancamento", "Transferência interna", "Transferência externa"]
 
 def CriarBancoDeDados():
     try:
@@ -40,7 +42,7 @@ def PegarDadosAlunos(parametro):
             nota3 = float(entrada_nota3.get())
             media = (nota1 + nota2 + nota3) / 3
             if len(nome) > 0 and nome.isalpha():
-                if len(disciplina) > 0 and disciplina.isalpha():
+                if len(disciplina) > 0 and disciplina.isalpha() and disciplina in lista_disciplinas:
                     if nota1 <= 10 and nota2 <= 10 and nota3 <= 10:
                         Aluno.inserir_dados(nome, matricula, id_disciplina, disciplina, nota1, nota2, nota3, media)
                         mensagem['text'] = 'Dados inseridos com sucesso!' 
@@ -71,15 +73,33 @@ def PegarDadosAlunos(parametro):
         elif parametro == 4:
             BancoDeDados.todos_os_alunos()
             mensagem['text'] = 'Dados de todos os alunos retornados!'
+            ResultadoPesquisa()
         elif parametro == 5:
             BancoDeDados.todos_as_disciplinas()
             mensagem['text'] = 'Dados de todas as disciplinas retornados!'
+            ResultadoPesquisa()
         elif parametro == 6:
             BancoDeDados.all_medias_alunos()
             mensagem['text'] = 'Dados de todas os alunos e medias retornados!'
+            ResultadoPesquisa()
     except Exception as erro:
         print("Ocorreu um erro:",erro)
-    
+
+def ResultadoPesquisa():
+    janela2 = Tk()
+    janela2.title("Resultado de pesquisa")
+    #master.iconbitmap(default="icone.ico")
+    janela2.geometry("300x400+560+150")
+    janela2.wm_resizable(width=False, height=False)
+
+    botao_voltar = Button(janela2, text="Concluido", command = janela2.destroy)
+    botao_voltar.place(width=102, height=33, x=100, y=350)
+
+    dados = Label(janela2, text='0000', font="Arial 12", relief='flat', fg='#020304', bg='#ededed')
+    dados.place(width=300, height=350, x=0, y=0)
+
+    janela2.mainloop()
+
 class Aluno:
     def __init__(self, nome_aluno, matricula, id_disciplina, nome_disciplina, nota1, nota2, nota3, media):
         self.nome_aluno = nome_aluno
@@ -122,7 +142,6 @@ class BancoDeDados:
             if not selecao_resultado:
                 print(">>> Não há dados de alunos a serem visualizados!")
             else:
-                print('>>> Lista de todos os alunos:')
                 '''O banco de dados retorna uma lista com varias tuplas.
                 Cada tupla contem o nome de um aluno.
                 O que fiz abaixo foi transformar essas tuplas em listas.
@@ -135,7 +154,7 @@ class BancoDeDados:
                     dados_lista = list(dado)
                     for aluno in dados_lista:
                         arquivo.write(aluno)
-                        arquivo.write("\n")
+                        arquivo.write("\n")          
                 arquivo.close()
         except Exception as erro:
             print(erro)
@@ -175,7 +194,6 @@ class BancoDeDados:
         except Exception as erro:
             print(erro)
 
-
 #criação da janela
 janela = Tk()
 janela.title("Laçamento de notas de alunos")
@@ -193,61 +211,61 @@ labelfundo.place(x=0, y=0)
 #Adicionar Aluno ------------------------------------
 
 #Entradas
-entrada_nome_aluno = Entry(janela, justify=CENTER)
+entrada_nome_aluno = Entry(janela, justify=LEFT)
 entrada_nome_aluno.place(width=231, height=22, x=102, y=135)
 
 entrada_nome_disciplina = ttk.Combobox(janela, values=lista_disciplinas)
 entrada_nome_disciplina.place(width=202, height=22, x=131, y=173)
 
-entrada_nota1 = Entry(janela, justify=CENTER)
+entrada_nota1 = Entry(janela, justify=LEFT)
 entrada_nota1.place(width=70, height=22, x=98, y=210)
 
-entrada_nota2 = Entry(janela, justify=CENTER)
+entrada_nota2 = Entry(janela, justify=LEFT)
 entrada_nota2.place(width=70, height=22, x=181, y=210)
 
-entrada_nota3 = Entry(janela, justify=CENTER)
+entrada_nota3 = Entry(janela, justify=LEFT)
 entrada_nota3.place(width=70, height=22, x=263, y=210)
 
 #Botao
-botao1 = Button(janela, text="Salvar", relief='flat', command=lambda:PegarDadosAlunos(1))
+botao1 = Button(janela, text="Salvar", relief='raised', command=lambda:PegarDadosAlunos(1))
 botao1.place(width=102, height=33, x=138, y=252)
 
 #Alterar aluno ------------------------------------
 
 #Entradas
-entrada_matricula = Entry(janela, justify=CENTER)
+entrada_matricula = Entry(janela, justify=LEFT)
 entrada_matricula.place(width=202, height=22, x=492, y=171)
 
-entrada_novo_nome = Entry(janela, justify=CENTER)
+entrada_novo_nome = Entry(janela, justify=LEFT)
 entrada_novo_nome.place(width=187, height=22, x=506, y=210)
 
 #Botao
-botao2 = Button(janela, text="Alterar", relief='flat', command=lambda:PegarDadosAlunos(2))
+botao2 = Button(janela, text="Alterar", relief='raised', command=lambda:PegarDadosAlunos(2))
 botao2.place(width=102, height=33, x=500, y=252)
 
 #Excluir alunos ------------------------------------
 
 #Entradas
-entrada_matricula_delete = Entry(janela, justify=CENTER)
+entrada_matricula_delete = Entry(janela, justify=LEFT)
 entrada_matricula_delete.place(width=205, height=22, x=850, y=173)
 
-entrada_motivo = Entry(janela, justify=CENTER)
+entrada_motivo = ttk.Combobox(janela, values=motivo)
 entrada_motivo.place(width=225, height=22, x=831, y=210)
 
 #Botao
-botao3 = Button(janela, text="Excluir", relief='flat', command=lambda:PegarDadosAlunos(3))
+botao3 = Button(janela, text="Excluir", relief='raised', command=lambda:PegarDadosAlunos(3))
 botao3.place(width=102, height=33, x=861, y=252)
 
 #Consultas ------------------------------------------
 
-botao_consultar_alunos = Button(janela, text="Alunos", relief='flat', command=lambda:PegarDadosAlunos(4))
+botao_consultar_alunos = Button(janela, text="Alunos", relief='raised', command=lambda:PegarDadosAlunos(4))
 botao_consultar_alunos.place(width=232, height=32, x=72, y=367)
 
-botao_consultar_disciplinas = Button(janela, text="Disciplinas", relief='flat', command=lambda:PegarDadosAlunos(5))
-botao_consultar_disciplinas.place(width=232, height=32, x=72, y=421)
+botao_consultar_disciplinas = Button(janela, text="Disciplinas", relief='raised', command=lambda:PegarDadosAlunos(5))
+botao_consultar_disciplinas.place(width=232, height=32, x=72, y=415)
 
-botao_consultar_medias = Button(janela, text="Médias", relief='flat', command=lambda:PegarDadosAlunos(6))
-botao_consultar_medias.place(width=232, height=32, x=72, y=474)
+botao_consultar_medias = Button(janela, text="Médias", relief='raised', command=lambda:PegarDadosAlunos(6))
+botao_consultar_medias.place(width=232, height=32, x=72, y=464)
 
 #--------------------------------------------------------------
 #Mensagens na tela

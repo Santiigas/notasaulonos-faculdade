@@ -1,0 +1,24 @@
+>>> Lista de todos as disciplinas:
+Fernandes
+EU
+Python
+Ingles
+aaaa
+Mate
+aaa
+Historia
+Matematica
+aaa
+sss
+historias
+aaa
+Portugues
+aaa
+aaa
+ddd
+Literatura
+Ingles
+matetica
+.!entry2
+Matematica
+Arte
