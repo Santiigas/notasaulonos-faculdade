@@ -1,6 +1,0 @@
->>> Lista de todos os alunos e suas medias:
-Aluno: Santiago | Media: 9.633333333333333
-Aluno: Vilma | Media: 0.0
-Aluno: Manoel | Media: 6.666666666666667
-Aluno: Helena | Media: 10.0
-Aluno: Paulo | Media: 9.166666666666666

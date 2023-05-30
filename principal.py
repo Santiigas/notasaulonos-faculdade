@@ -1,10 +1,12 @@
 import sqlite3 as conector
 from tkinter import *
+from tkinter import ttk
 import random
 import string
 
 conexao = conector.connect('C:/Users/Usuario/Documents/teste/meubanco11.db')
 cursor = conexao.cursor()
+lista_disciplinas = ["Português", "História", "Biologia", "Literatura", "Química", "Matemática", "Física", "Inglês", "Espanhol" ]
 
 def CriarBancoDeDados():
     try:
@@ -31,7 +33,7 @@ def PegarDadosAlunos(parametro):
         matricula = ''.join(random.choices(string.digits, k=12))
         id_disciplina = ''.join(random.choices(string.digits, k=6))
         if parametro == 1:
-            nome= str(entrada_nome_aluno.get())
+            nome = str(entrada_nome_aluno.get())
             disciplina = str(entrada_nome_disciplina.get())
             nota1 = float(entrada_nota1.get())
             nota2 = float(entrada_nota2.get())
@@ -172,6 +174,8 @@ class BancoDeDados:
             arquivo.close()
         except Exception as erro:
             print(erro)
+
+
 #criação da janela
 janela = Tk()
 janela.title("Laçamento de notas de alunos")
@@ -192,7 +196,7 @@ labelfundo.place(x=0, y=0)
 entrada_nome_aluno = Entry(janela, justify=CENTER)
 entrada_nome_aluno.place(width=231, height=22, x=102, y=135)
 
-entrada_nome_disciplina = Entry(janela, justify=CENTER)
+entrada_nome_disciplina = ttk.Combobox(janela, values=lista_disciplinas)
 entrada_nome_disciplina.place(width=202, height=22, x=131, y=173)
 
 entrada_nota1 = Entry(janela, justify=CENTER)
@@ -247,7 +251,7 @@ botao_consultar_medias.place(width=232, height=32, x=72, y=474)
 
 #--------------------------------------------------------------
 #Mensagens na tela
-mensagem = Label(janela, text='000', font="Arial 17", relief='flat', fg='#020304', bg='#ededed')
+mensagem = Label(janela, text='', font="Arial 17", relief='flat', fg='#020304', bg='#ededed')
 mensagem.place(width=500, height=25, x=500, y=420)
 
 janela.mainloop()
