@@ -1,0 +1,6 @@
+>>> Lista de todos os alunos:
+Paulo
+Manoel
+Helena
+Santiago
+Vilma

@@ -1,0 +1,12 @@
+>>> Lista de todos as disciplinas:
+EU
+Python
+Ingles
+Mate
+Historia
+Matematica
+Portugues
+ddd
+matetica
+.!entry2
+Arte
