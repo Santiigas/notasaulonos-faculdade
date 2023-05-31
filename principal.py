@@ -4,7 +4,7 @@ from tkinter import ttk
 import random
 import string
 
-conexao = conector.connect('C:/Users/Usuario/Documents/teste/meubanco11.db')
+conexao = conector.connect('C:/Users/Usuario/Documents/teste/meubanco12.db')
 cursor = conexao.cursor()
 
 lista_disciplinas = ["Português", "História", "Biologia", "Literatura", "Química", "Matemática", "Física", "Inglês", "Espanhol" ]
@@ -28,7 +28,9 @@ def CriarBancoDeDados():
                             nota3 REAL,
                             media REAL);''')
     except Exception as erro:
-        print(erro)
+        print("Erro na criacão do banco:",erro)
+
+CriarBancoDeDados()
 
 def PegarDadosAlunos(parametro):
     try:
@@ -73,19 +75,19 @@ def PegarDadosAlunos(parametro):
         elif parametro == 4:
             BancoDeDados.todos_os_alunos()
             mensagem['text'] = 'Dados de todos os alunos retornados!'
-            ResultadoPesquisa()
+            ResultadoPesquisa(1)
         elif parametro == 5:
             BancoDeDados.todos_as_disciplinas()
             mensagem['text'] = 'Dados de todas as disciplinas retornados!'
-            ResultadoPesquisa()
+            ResultadoPesquisa(2)
         elif parametro == 6:
             BancoDeDados.all_medias_alunos()
             mensagem['text'] = 'Dados de todas os alunos e medias retornados!'
-            ResultadoPesquisa()
+            ResultadoPesquisa(3)
     except Exception as erro:
-        print("Ocorreu um erro:",erro)
+        print("Erro na coleta de dados:",erro)
 
-def ResultadoPesquisa():
+def ResultadoPesquisa(parametro):
     janela2 = Tk()
     janela2.title("Resultado de pesquisa")
     #master.iconbitmap(default="icone.ico")
@@ -95,8 +97,20 @@ def ResultadoPesquisa():
     botao_voltar = Button(janela2, text="Concluido", command = janela2.destroy)
     botao_voltar.place(width=102, height=33, x=100, y=350)
 
-    dados = Label(janela2, text='0000', font="Arial 12", relief='flat', fg='#020304', bg='#ededed')
-    dados.place(width=300, height=350, x=0, y=0)
+    texto = Text(janela2, font='Arial 10')
+    texto.place(width=300, height=350, x=0, y=0)
+    try:
+        if parametro == 1:
+            resultado = open("todos_os_alunos.txt","r")
+            texto.insert(0.0, resultado.read())
+        if parametro == 2:
+            resultado = open("todas_as_disciplinas.txt","r")
+            texto.insert(0.0, resultado.read())
+        if parametro == 3:
+            resultado = open("todas_as_medias_e_alunos.txt","r")
+            texto.insert(0.0, resultado.read())
+    except Exception as erro:
+        print("Erro na janela 2:",erro)
 
     janela2.mainloop()
 
@@ -117,7 +131,6 @@ class Aluno:
         comando = '''INSERT INTO resultados VALUES (:aluno_id, :disciplina_id, :nota1, :nota2, :nota3, :media);'''
         cursor.execute(comando, {"aluno_id": matricula, "disciplina_id": id_disciplina, "nota1": nota1, "nota2": nota2, "nota3": nota3, "media": media})
         conexao.commit()
-        print(">>> Dados adicionados com sucesso!")
 
     def excluir_dados(matricula):
         comando = '''DELETE FROM aluno WHERE matricula = :matricula;'''
@@ -127,12 +140,10 @@ class Aluno:
         comando = '''DELETE FROM resultados WHERE aluno_id = :aluno_id;'''
         cursor.execute(comando, {"aluno_id": matricula})
         conexao.commit()
-        print(">>> Dados apagados com sucesso!")
 
     def alterar_dados(matricula, nome_aluno):
         cursor.execute("UPDATE aluno SET nome_aluno = ? WHERE matricula = ?", (nome_aluno, matricula))
         conexao.commit()
-        print(">>> Dados atualizados com sucesso!")
 
 class BancoDeDados:
     def todos_os_alunos():
@@ -148,16 +159,16 @@ class BancoDeDados:
                 Ou seja: Lista do banco de dados -contem- varias lista com um nome do aluno cada
                 No fim retornamos os dados, ou seja, somente o nome do aluno
                 '''
-                arquivo = open("todas_os_alunos.txt","w")
+                arquivo = open("todos_os_alunos.txt","w")
                 arquivo.write(">>> Lista de todos os alunos:\n")
                 for dado in selecao_resultado:
                     dados_lista = list(dado)
                     for aluno in dados_lista:
                         arquivo.write(aluno)
-                        arquivo.write("\n")          
-                arquivo.close()
+                        arquivo.write("\n")
+                arquivo.close()        
         except Exception as erro:
-            print(erro)
+            print("Erro na consulta: Alunos:",erro)
     def todos_as_disciplinas():
         try:
             cursor.execute("SELECT nome_disciplina FROM disciplina;")
@@ -174,7 +185,7 @@ class BancoDeDados:
                         arquivo.write("\n")
                 arquivo.close()
         except Exception as erro:
-            print(erro)
+            print("Erro na consulta: Disciplinas:",erro)
     def all_medias_alunos():
         try:
             cursor.execute("SELECT aluno.nome_aluno, resultados.media "
@@ -192,7 +203,7 @@ class BancoDeDados:
                     arquivo.write("\n")
             arquivo.close()
         except Exception as erro:
-            print(erro)
+            print("Erro na consulta: Medias e Alunos:",erro)
 
 #criação da janela
 janela = Tk()

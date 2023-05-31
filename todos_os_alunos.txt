@@ -1,0 +1,4 @@
+>>> Lista de todos os alunos:
+Alana
+Santiago
+Pedro
