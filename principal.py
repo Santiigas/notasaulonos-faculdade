@@ -33,44 +33,40 @@ def CriarBancoDeDados():
 
 def PegarDadosAlunos(parametro):
     try:
-        matricula = ''.join(random.choices(string.digits, k=12))
-        id_disciplina = ''.join(random.choices(string.digits, k=6))
+        matricula = ''.join(random.choices(string.digits, k=10))
+        id_aluno = ''.join(random.choices(string.digits, k=3))
         if parametro == 1:
             nome = str(entrada_nome_aluno.get())
-            disciplina = str(entrada_nome_disciplina.get())
-            nota1 = float(entrada_nota1.get())
-            nota2 = float(entrada_nota2.get())
-            nota3 = float(entrada_nota3.get())
-            media = (nota1 + nota2 + nota3) / 3
+            matricula = str(entrada_nome_matricula.get())
             if len(nome) > 0 and nome.isalpha():
-                if len(disciplina) > 0 and disciplina.isalpha() and disciplina in lista_disciplinas:
-                    if nota1 <= 10 and nota2 <= 10 and nota3 <= 10:
-                        Aluno.inserir_dados(nome, matricula, id_disciplina, disciplina, nota1, nota2, nota3, media)
-                        mensagem['text'] = 'Dados inseridos com sucesso!' 
-                    else:
-                        mensagem['text'] = 'Notas invalidas! Tente novamente'
+                if len(matricula) == 10 and matricula.isdigit():
+                    SalvarNoBanco.inserir_dados_aluno(nome, matricula, id_aluno)
+                    mensagem['text'] = 'Dados inseridos com sucesso!' 
                 else:
-                    mensagem['text'] = 'Disciplina invalida! Tente novamente'
+                    mensagem['text'] = 'Matricula! Tente novamente'
             else:
                 mensagem['text'] = 'Nome invalido! Tente novamente'
+
         elif parametro == 2:
-            matricula_alterar= str(entrada_matricula.get())
-            novo_nome = str(entrada_novo_nome .get())
-            if len(matricula_alterar) == 12 and matricula_alterar.isdigit():
-                if len(novo_nome) > 0 and novo_nome.isalpha():
-                    Aluno.alterar_dados(matricula_alterar, novo_nome)
+            nome = str(entrada_nome_aluno.get())
+            matricula = str(entrada_nome_matricula.get())
+            id_aluno = int(entrada_id_aluno.get())
+            if len(nome) > 0 and nome.isalpha():
+                if len(id_aluno) == 3:
+                    AlterarNoBanco.alterar_dados_aluno(id_aluno, nome)
                     mensagem['text'] = 'Dados alterados com sucesso!'
                 else:
-                    mensagem['text'] = 'Novo nome invalido'
+                    mensagem['text'] = 'Id do aluno invalido! Tente novamente'
             else:
-                mensagem['text'] = 'Matricula invalida'
+                mensagem['text'] = 'Novo nome invalido! Tente novamente'
+
         elif parametro == 3:
-            matricula_delete = str(entrada_matricula_delete.get())
-            if len(matricula_delete) == 12 and matricula_delete.isdigit():
-                Aluno.excluir_dados(matricula_delete)
+            id_aluno = int(entrada_id_aluno.get())
+            if len(id_aluno) == 3:
+                ExcluirNoBanco.excluir_dados_aluno(id_aluno)
                 mensagem['text'] = 'Dados deletados com sucesso!'
             else:
-                mensagem['text'] = 'Matricula invalida!'
+                mensagem['text'] = 'Id do aluno invalido! Tente novamente!'
     except Exception as erro:
         print("Erro na coleta de dados:",erro)
 
@@ -330,3 +326,12 @@ mensagem.place(width=500, height=25, x=500, y=380)
 janela.mainloop()
 cursor.close()
 conexao.close()
+
+
+'''
+           disciplina = str(entrada_nome_disciplina.get())
+            nota1 = float(entrada_nota1.get())
+            nota2 = float(entrada_nota2.get())
+            nota3 = float(entrada_nota3.get())
+            media = (nota1 + nota2 + nota3) / 3
+'''
