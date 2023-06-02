@@ -31,8 +31,6 @@ def CriarBancoDeDados():
     except Exception as erro:
         print("Erro na criacão do banco:",erro)
 
-CriarBancoDeDados()
-
 def PegarDadosAlunos(parametro):
     try:
         matricula = ''.join(random.choices(string.digits, k=12))
@@ -73,20 +71,31 @@ def PegarDadosAlunos(parametro):
                 mensagem['text'] = 'Dados deletados com sucesso!'
             else:
                 mensagem['text'] = 'Matricula invalida!'
-        elif parametro == 4:
+    except Exception as erro:
+        print("Erro na coleta de dados:",erro)
+
+def PegarDadosMatricula(parametro):
+    pass
+
+def PegarDadosResultado(parametro):
+    pass
+
+def RetornarDados(parametro):
+    try:
+        if parametro == 1:
             BancoDeDados.todos_os_alunos()
             mensagem['text'] = 'Dados de todos os alunos retornados!'
             ResultadoPesquisa(1)
-        elif parametro == 5:
+        elif parametro == 2:
             BancoDeDados.todos_as_disciplinas()
             mensagem['text'] = 'Dados de todas as disciplinas retornados!'
             ResultadoPesquisa(2)
-        elif parametro == 6:
+        elif parametro == 3:
             BancoDeDados.all_medias_alunos()
             mensagem['text'] = 'Dados de todas os alunos e medias retornados!'
             ResultadoPesquisa(3)
     except Exception as erro:
-        print("Erro na coleta de dados:",erro)
+        print("Erro na retorno de dados:",erro)
 
 def ResultadoPesquisa(parametro):
     janela2 = Tk()
@@ -112,40 +121,53 @@ def ResultadoPesquisa(parametro):
             texto.insert(0.0, resultado.read())
     except Exception as erro:
         print("Erro na janela 2:",erro)
-
     janela2.mainloop()
 
-class Aluno:
-    def __init__(self, nome_aluno, matricula, id_disciplina, nome_disciplina, nota1, nota2, nota3, media):
-        self.nome_aluno = nome_aluno
-        self.matricula = matricula
-
-    def inserir_dados(nome_aluno, matricula, id_disciplina, nome_disciplina, nota1, nota2, nota3, media):
-        comando = '''INSERT INTO aluno VALUES (:matricula, :nome_aluno);'''
-        cursor.execute(comando, {"matricula": matricula, "nome_aluno": nome_aluno})
+class SalvarNoBanco:
+    def inserir_dados_aluno(nome_aluno, matricula, id_aluno):
+        comando = '''INSERT INTO aluno VALUES (:id_aluno, :nome_aluno, :matricula);'''
+        cursor.execute(comando, {"id_aluno": id_aluno, "nome_aluno": nome_aluno, "matricula": matricula})
         conexao.commit()
 
+    def inserir_dados_disciplina(id_disciplina, nome_disciplina):
         comando = '''INSERT INTO disciplina VALUES (:id_disciplina, :nome_disciplina);'''
         cursor.execute(comando, {"id_disciplina": id_disciplina, "nome_disciplina": nome_disciplina})
         conexao.commit()
 
-        comando = '''INSERT INTO resultados VALUES (:aluno_id, :disciplina_id, :nota1, :nota2, :nota3, :media);'''
-        cursor.execute(comando, {"aluno_id": matricula, "disciplina_id": id_disciplina, "nota1": nota1, "nota2": nota2, "nota3": nota3, "media": media})
+    def inserir_dados_resultado(aluno_id, disciplina_id, nota1, nota2, nota3, media):
+        comando = '''INSERT INTO resultados VALUES (:id_aluno, :id_disciplina, :nota1, :nota2, :nota3, :media);'''
+        cursor.execute(comando, {"aluno_id": aluno_id, "disciplina_id": disciplina_id, "nota1": nota1, "nota2": nota2, "nota3": nota3, "media": media})
         conexao.commit()
 
-    def excluir_dados(matricula):
-        comando = '''DELETE FROM aluno WHERE matricula = :matricula;'''
-        cursor.execute(comando, {"matricula": matricula})
+class ExcluirNoBanco:
+    def excluir_dados_aluno(id_aluno):
+        comando = '''DELETE FROM aluno WHERE id_aluno = :id_aluno;'''
+        cursor.execute(comando, {"id_aluno": id_aluno})
         conexao.commit()
 
+    def excluir_dados_disciplinas(id_disciplina):
+        comando = '''DELETE FROM disciplina WHERE id_disciplina = :id_disciplina;'''
+        cursor.execute(comando, {"id_disciplina": id_disciplina})
+        conexao.commit()
+
+    def exluir_dados_resultado(id_aluno):
         comando = '''DELETE FROM resultados WHERE aluno_id = :aluno_id;'''
-        cursor.execute(comando, {"aluno_id": matricula})
+        cursor.execute(comando, {"aluno_id": id_aluno})
         conexao.commit()
 
-    def alterar_dados(matricula, nome_aluno):
-        cursor.execute("UPDATE aluno SET nome_aluno = ? WHERE matricula = ?", (nome_aluno, matricula))
+class AlterarNoBanco:
+    def alterar_dados_aluno(id_aluno, nome_aluno):
+        cursor.execute("UPDATE aluno SET nome_aluno = ? WHERE id_aluno = ?", (nome_aluno, id_aluno))
         conexao.commit()
 
+    def alterar_dados_disciplina(id_disciplina, nome_disciplina):
+        cursor.execute("UPDATE disciplina SET nome_disciplina = ? WHERE id_disciplina = ?", (nome_disciplina, id_disciplina))
+        conexao.commit()
+
+    def alterar_dados_resultado(id_aluno, nota1, nota2, nota3):
+        cursor.execute("UPDATE resultado SET nota1, nota2, nota3 = ? WHERE id_aluno = ?", (nota1, nota2, nota3, id_aluno))
+        conexao.commit()
+    
 class BancoDeDados:
     def todos_os_alunos():
         try:
@@ -220,69 +242,90 @@ fundo_imagem = PhotoImage(file="modelo.png")
 labelfundo = Label(janela, image=fundo_imagem)
 labelfundo.place(x=0, y=0)
 
-#Adicionar Aluno ------------------------------------
+#Aluno ------------------------------------
 
 #Entradas
 entrada_nome_aluno = Entry(janela, justify=LEFT)
-entrada_nome_aluno.place(width=231, height=22, x=102, y=135)
+entrada_nome_aluno.place(width=228, height=22, x=105, y=120)
 
-entrada_nome_disciplina = ttk.Combobox(janela, values=lista_disciplinas)
-entrada_nome_disciplina.place(width=202, height=22, x=131, y=173)
+entrada_nome_matricula = Entry(janela, justify=LEFT)
+entrada_nome_matricula.place(width=202, height=22, x=131, y=160)
 
-entrada_nota1 = Entry(janela, justify=LEFT)
-entrada_nota1.place(width=70, height=22, x=98, y=210)
-
-entrada_nota2 = Entry(janela, justify=LEFT)
-entrada_nota2.place(width=70, height=22, x=181, y=210)
-
-entrada_nota3 = Entry(janela, justify=LEFT)
-entrada_nota3.place(width=70, height=22, x=263, y=210)
+entrada_id_aluno = Entry(janela, justify=LEFT)
+entrada_id_aluno.place(width=100, height=22, x=119, y=195)
 
 #Botao
 botao1 = Button(janela, text="Salvar", relief='raised', command=lambda:PegarDadosAlunos(1))
-botao1.place(width=102, height=33, x=138, y=252)
+botao1.place(width=70, height=33, x=72, y=232)
 
-#Alterar aluno ------------------------------------
+botao1 = Button(janela, text="Alterar", relief='raised', command=lambda:PegarDadosAlunos(2))
+botao1.place(width=70, height=33, x=158, y=232)
 
-#Entradas
-entrada_matricula = Entry(janela, justify=LEFT)
-entrada_matricula.place(width=202, height=22, x=492, y=171)
+botao1 = Button(janela, text="Excluir", relief='raised', command=lambda:PegarDadosAlunos(3))
+botao1.place(width=70, height=33, x=244, y=232)
 
-entrada_novo_nome = Entry(janela, justify=LEFT)
-entrada_novo_nome.place(width=187, height=22, x=506, y=210)
-
-#Botao
-botao2 = Button(janela, text="Alterar", relief='raised', command=lambda:PegarDadosAlunos(2))
-botao2.place(width=102, height=33, x=500, y=252)
-
-#Excluir alunos ------------------------------------
+#Disciplinas ------------------------------------
 
 #Entradas
-entrada_matricula_delete = Entry(janela, justify=LEFT)
-entrada_matricula_delete.place(width=205, height=22, x=850, y=173)
+entrada_disciplina= Entry(janela, justify=LEFT)
+entrada_disciplina.place(width=232, height=22, x=462, y=120)
 
-entrada_motivo = ttk.Combobox(janela, values=motivo)
-entrada_motivo.place(width=225, height=22, x=831, y=210)
+entrada_id_disciplina = Entry(janela, justify=LEFT)
+entrada_id_disciplina.place(width=187, height=22, x=506, y=160)
 
 #Botao
-botao3 = Button(janela, text="Excluir", relief='raised', command=lambda:PegarDadosAlunos(3))
-botao3.place(width=102, height=33, x=861, y=252)
+botao1 = Button(janela, text="Salvar", relief='raised', command=lambda:PegarDadosMatricula(1))
+botao1.place(width=70, height=33, x=428, y=232)
+
+botao1 = Button(janela, text="Alterar", relief='raised', command=lambda:PegarDadosMatricula(2))
+botao1.place(width=70, height=33, x=514, y=232)
+
+botao1 = Button(janela, text="Excluir", relief='raised', command=lambda:PegarDadosMatricula(3))
+botao1.place(width=70, height=33, x=600, y=232)
+
+#Resultado ------------------------------------
+
+#Entradas
+entrada_id_aluno_resultado = Entry(janela, justify=LEFT)
+entrada_id_aluno_resultado.place(width=217, height=22, x=838, y=119)
+
+entrada_id_disciplina = Entry(janela, justify=LEFT)
+entrada_id_disciplina.place(width=190, height=22, x=865, y=157)
+
+entrada_nota1 = Entry(janela, justify=LEFT)
+entrada_nota1.place(width=70, height=22, x=820, y=195)
+
+entrada_nota2 = Entry(janela, justify=LEFT)
+entrada_nota2.place(width=70, height=22, x=903, y=195)
+
+entrada_nota3 = Entry(janela, justify=LEFT)
+entrada_nota3.place(width=70, height=22, x=986, y=195)
+
+#Botao
+botao1 = Button(janela, text="Salvar", relief='raised', command=lambda:PegarDadosResultado(1))
+botao1.place(width=70, height=33, x=794, y=232)
+
+botao1 = Button(janela, text="Alterar", relief='raised', command=lambda:PegarDadosResultado(2))
+botao1.place(width=70, height=33, x=877, y=232)
+
+botao1 = Button(janela, text="Excluir", relief='raised', command=lambda:PegarDadosResultado(3))
+botao1.place(width=70, height=33, x=960, y=232)
 
 #Consultas ------------------------------------------
 
-botao_consultar_alunos = Button(janela, text="Alunos", relief='raised', command=lambda:PegarDadosAlunos(4))
-botao_consultar_alunos.place(width=232, height=32, x=72, y=367)
+botao_consultar_alunos = Button(janela, text="Alunos", relief='raised', command=lambda:RetornarDados(1))
+botao_consultar_alunos.place(width=232, height=32, x=72, y=340)
 
-botao_consultar_disciplinas = Button(janela, text="Disciplinas", relief='raised', command=lambda:PegarDadosAlunos(5))
-botao_consultar_disciplinas.place(width=232, height=32, x=72, y=415)
+botao_consultar_disciplinas = Button(janela, text="Disciplinas", relief='raised', command=lambda:RetornarDados(2))
+botao_consultar_disciplinas.place(width=232, height=32, x=72, y=390)
 
-botao_consultar_medias = Button(janela, text="Médias", relief='raised', command=lambda:PegarDadosAlunos(6))
-botao_consultar_medias.place(width=232, height=32, x=72, y=464)
+botao_consultar_medias = Button(janela, text="Médias", relief='raised', command=lambda:RetornarDados(3))
+botao_consultar_medias.place(width=232, height=32, x=72, y=440)
 
 #--------------------------------------------------------------
 #Mensagens na tela
 mensagem = Label(janela, text='', font="Arial 17", relief='flat', fg='#020304', bg='#ededed')
-mensagem.place(width=500, height=25, x=500, y=420)
+mensagem.place(width=500, height=25, x=500, y=380)
 
 janela.mainloop()
 cursor.close()
