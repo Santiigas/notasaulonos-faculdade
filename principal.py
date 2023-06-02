@@ -4,7 +4,7 @@ from tkinter import ttk
 import random
 import string
 
-conexao = conector.connect('C:/Users/Usuario/Documents/teste/meubanco12.db')
+conexao = conector.connect('C:/Users/Usuario/Documents/teste/meubanco13.db')
 cursor = conexao.cursor()
 
 lista_disciplinas = ["Português", "História", "Biologia", "Literatura", "Química", "Matemática", "Física", "Inglês", "Espanhol" ]
@@ -13,15 +13,16 @@ motivo = ["Trancamento", "Transferência interna", "Transferência externa"]
 def CriarBancoDeDados():
     try:
         cursor.execute('''CREATE TABLE aluno (
-                            matricula INTEGER PRIMARY KEY,
-                            nome_aluno TEXT (50));''')
+                            id_aluno INTEGER PRIMARY KEY,
+                            nome_aluno TEXT (50)),
+                            matricula INTEGER;''')
 
         cursor.execute('''CREATE TABLE disciplina (
                             id_disciplina INTEGER PRIMARY KEY,
                             nome_disciplina TEXT (40));''')
                                 
         cursor.execute('''CREATE TABLE resultados (
-                            aluno_id INTEGER REFERENCES aluno (matricula),
+                            aluno_id INTEGER REFERENCES aluno (id_aluno),
                             disciplina_id INTEGER REFERENCES disciplina (id_disciplina),
                             nota1 REAL,
                             nota2 REAL,
