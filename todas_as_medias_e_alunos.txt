@@ -1,4 +1,0 @@
->>> Lista de todos os alunos e suas medias:
-Aluno: Santiago | Media: 9.0
-Aluno: Alana | Media: 6.333333333333333
-Aluno: Pedro | Media: 10.0

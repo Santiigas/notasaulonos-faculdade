@@ -1,4 +1,5 @@
 >>> Lista de todos os alunos:
-Alana
-Santiago
-Pedro
+Id: 11 | Aluno: Pedro | Matricula: 6666666
+Id: 321 | Aluno: Jose | Matricula: 1
+Id: 331 | Aluno: Ricas | Matricula: 5
+Id: 956 | Aluno: Renata | Matricula: 6

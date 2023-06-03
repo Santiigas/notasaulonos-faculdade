@@ -1,5 +1,5 @@
 >>> Lista de todos as disciplinas:
-História
-Espanhol
-Matemática
-Português
+ID: 5 | Disciplina: Putaria
+ID: 10 | Disciplina: Fisica
+ID: 12 | Disciplina: Drogas
+ID: 30 | Disciplina: Python
