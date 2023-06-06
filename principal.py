@@ -34,7 +34,7 @@ def CriarBancoDeDados():
 def PegarDadosAlunos(parametro):
     try:
         if parametro == 1:
-            id_aluno = ''.join(random.choices(string.digits, k=3))
+            id_aluno = ''.join(random.choices(string.digits, k=8))
             nome = str(entrada_nome_aluno.get())
             matricula = int(entrada_nome_matricula.get())
             if len(nome) > 0 and nome.isalpha():
@@ -48,7 +48,7 @@ def PegarDadosAlunos(parametro):
             matricula = int(entrada_nome_matricula.get())
             id_aluno = str(entrada_id_aluno.get())
             if len(nome) > 0 and nome.isalpha():
-                if len(id_aluno) == 3:
+                if len(id_aluno) == 8:
                     AlterarNoBanco.alterar_dados_aluno(int(id_aluno), nome)
                     mensagem['text'] = 'Dados alterados com sucesso!'
                 else:
@@ -58,7 +58,7 @@ def PegarDadosAlunos(parametro):
 
         elif parametro == 3:
             id_aluno = str(entrada_id_aluno.get())
-            if len(id_aluno) == 3:
+            if len(id_aluno) == 8:
                 ExcluirNoBanco.excluir_dados_aluno(int(id_aluno))
                 mensagem['text'] = 'Dados deletados com sucesso!'
             else:
@@ -68,8 +68,8 @@ def PegarDadosAlunos(parametro):
 
 def PegarDadosDisciplina(parametro):
     try:
-        id_disciplina = ''.join(random.choices(string.digits, k=2))
         if parametro == 1:
+            id_disciplina = ''.join(random.choices(string.digits, k=6))
             disciplina = str(entrada_disciplina.get())
             if len(disciplina) > 0 and disciplina.isalpha():
                 SalvarNoBanco.inserir_dados_disciplina(id_disciplina, disciplina)
@@ -81,7 +81,7 @@ def PegarDadosDisciplina(parametro):
             disciplina = str(entrada_disciplina.get())
             id_disciplina = str(entrada_id_disciplina.get())
             if len(disciplina) > 0 and disciplina.isalpha():
-                if len(id_disciplina) == 2:
+                if len(id_disciplina) == 6:
                     AlterarNoBanco.alterar_dados_disciplina(int(id_disciplina), disciplina)
                     mensagem['text'] = 'Dados alterados com sucesso!'
                 else:
@@ -91,7 +91,7 @@ def PegarDadosDisciplina(parametro):
 
         elif parametro == 3:
             id_disciplina = str(entrada_id_disciplina.get())
-            if len(id_disciplina) == 2:
+            if len(id_disciplina) == 6:
                 ExcluirNoBanco.excluir_dados_disciplinas(int(id_disciplina))
                 mensagem['text'] = 'Dados deletados com sucesso!'
             else:
@@ -108,8 +108,8 @@ def PegarDadosResultado(parametro):
             nota2 = float(entrada_nota2.get())
             nota3 = float(entrada_nota3.get())
             media = (nota1 + nota2 + nota3) / 3
-            if len(id_aluno) == 2 :
-                if len(id_disciplina) == 2:
+            if len(id_aluno) == 8:
+                if len(id_disciplina) == 6:
                     if nota1 <= 10 and nota2 <= 10 and nota3 <= 10:
                         SalvarNoBanco.inserir_dados_resultado(int(id_aluno), int(id_disciplina), nota1, nota2, nota3, media)
                         mensagem['text'] = 'Dados inseridos com sucesso!' 
@@ -126,7 +126,7 @@ def PegarDadosResultado(parametro):
             nota2 = float(entrada_nota2.get())
             nota3 = float(entrada_nota3.get())
             media = (nota1 + nota2 + nota3) / 3
-            if len(id_aluno) == 3:
+            if len(id_aluno) == 8:
                 if nota1 <= 10 and nota2 <= 10 and nota3 <= 10:
                     AlterarNoBanco.alterar_dados_resultado(int(id_aluno), nota1, nota2, nota3, media)
                     mensagem['text'] = 'Dados atualizados com sucesso!' 
@@ -136,7 +136,7 @@ def PegarDadosResultado(parametro):
                 mensagem['text'] = 'Id aluno invalido! Tente novamente'
         elif parametro == 3:
             id_aluno = str(entrada_id_aluno_resultado.get())
-            if len(id_aluno) == 3:
+            if len(id_aluno) == 8:
                 ExcluirNoBanco.excluir_dados_aluno(int(id_aluno))
                 mensagem['text'] = 'Dados deletados com sucesso!'
             else:
@@ -188,6 +188,16 @@ def ResultadoPesquisa(parametro):
     janela2.mainloop()
 
 class SalvarNoBanco:
+    def __init__(self, nome_aluno, id_aluno, matricula, id_disciplina, nome_disciplina, nota1, nota2, nota3, media):
+        self.nome_aluno = nome_aluno
+        self.matricula = matricula
+        self.id_disciplina = id_disciplina
+        self.nome_disciplina = nome_disciplina
+        self.nota1 = nota1
+        self.nota2 = nota2
+        self.nota3 = nota3
+        self.media = media
+
     def inserir_dados_aluno(nome_aluno, matricula, id_aluno):
         comando = '''INSERT INTO aluno VALUES (:id_aluno, :nome_aluno, :matricula);'''
         cursor.execute(comando, {"id_aluno": id_aluno, "nome_aluno": nome_aluno, "matricula": matricula})

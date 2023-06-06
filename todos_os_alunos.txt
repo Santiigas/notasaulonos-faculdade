@@ -1,5 +1,5 @@
 >>> Lista de todos os alunos:
-Id: 11 | Aluno: Pedro | Matricula: 6666666
-Id: 321 | Aluno: Jose | Matricula: 1
-Id: 331 | Aluno: Ricas | Matricula: 5
-Id: 956 | Aluno: Renata | Matricula: 6
+Id: 6666 | Aluno: Santiago | Matricula: 666666666
+Id: 30540425 | Aluno: Doka | Matricula: 56485666
+Id: 43212086 | Aluno: Alef | Matricula: 2424
+Id: 50148857 | Aluno: Matue | Matricula: 56485666
