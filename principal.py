@@ -104,22 +104,16 @@ def PegarDadosResultado(parametro):
         if parametro == 1:
             id_aluno = str(entrada_id_aluno_resultado.get())
             id_disciplina = str(entrada_id_disciplina_resultado.get())
-            nota1 = float(entrada_nota1.get())
-            nota2 = float(entrada_nota2.get())
-            nota3 = float(entrada_nota3.get())
-            media = (nota1 + nota2 + nota3) / 3
+            nota1 = str(entrada_nota1.get())
+            nota2 = str(entrada_nota2.get())
+            nota3 = str(entrada_nota3.get())
+            media = 6666
             if len(id_aluno) == 8:
                 if len(id_disciplina) == 6:
-                    if nota1 <= 10 and nota2 <= 10 and nota3 <= 10:
-                        SalvarNoBanco.inserir_dados_resultado(int(id_aluno), int(id_disciplina), nota1, nota2, nota3, media)
-                        mensagem['text'] = 'Dados inseridos com sucesso!' 
-                    else:
-                        mensagem['text'] = 'Notas invalidas!' 
-                else:
-                    mensagem['text'] = 'Notas invalidas! Tente novamente!'
+                    SalvarNoBanco.inserir_dados_resultado(int(id_aluno), int(id_disciplina), float(nota1), float(nota2), float(nota3), float(media))
+                    mensagem['text'] = 'Dados inseridos com sucesso!' 
             else:
                 mensagem['text'] = 'Id aluno invalido! Tente novamente'
-
         elif parametro == 2:
             id_aluno = str(entrada_id_aluno_resultado.get())
             nota1 = float(entrada_nota1.get())
@@ -127,17 +121,14 @@ def PegarDadosResultado(parametro):
             nota3 = float(entrada_nota3.get())
             media = (nota1 + nota2 + nota3) / 3
             if len(id_aluno) == 8:
-                if nota1 <= 10 and nota2 <= 10 and nota3 <= 10:
                     AlterarNoBanco.alterar_dados_resultado(int(id_aluno), nota1, nota2, nota3, media)
                     mensagem['text'] = 'Dados atualizados com sucesso!' 
-                else:
-                    mensagem['text'] = 'Notas invalidas!' 
             else:
                 mensagem['text'] = 'Id aluno invalido! Tente novamente'
         elif parametro == 3:
             id_aluno = str(entrada_id_aluno_resultado.get())
             if len(id_aluno) == 8:
-                ExcluirNoBanco.excluir_dados_aluno(int(id_aluno))
+                ExcluirNoBanco.exluir_dados_resultado(int(id_aluno))
                 mensagem['text'] = 'Dados deletados com sucesso!'
             else:
                 mensagem['text'] = 'Id do aluno erado! Tente novamente!'
@@ -188,60 +179,59 @@ def ResultadoPesquisa(parametro):
     janela2.mainloop()
 
 class SalvarNoBanco:
-    def __init__(self, nome_aluno, id_aluno, matricula, id_disciplina, nome_disciplina, nota1, nota2, nota3, media):
-        self.nome_aluno = nome_aluno
-        self.matricula = matricula
-        self.id_disciplina = id_disciplina
-        self.nome_disciplina = nome_disciplina
-        self.nota1 = nota1
-        self.nota2 = nota2
-        self.nota3 = nota3
-        self.media = media
+    try:
+        def inserir_dados_aluno(nome_aluno, matricula, id_aluno):
+            comando = '''INSERT INTO aluno VALUES (:id_aluno, :nome_aluno, :matricula);'''
+            cursor.execute(comando, {"id_aluno": id_aluno, "nome_aluno": nome_aluno, "matricula": matricula})
+            conexao.commit()
 
-    def inserir_dados_aluno(nome_aluno, matricula, id_aluno):
-        comando = '''INSERT INTO aluno VALUES (:id_aluno, :nome_aluno, :matricula);'''
-        cursor.execute(comando, {"id_aluno": id_aluno, "nome_aluno": nome_aluno, "matricula": matricula})
-        conexao.commit()
+        def inserir_dados_disciplina(id_disciplina, nome_disciplina):
+            comando = '''INSERT INTO disciplina VALUES (:id_disciplina, :nome_disciplina);'''
+            cursor.execute(comando, {"id_disciplina": id_disciplina, "nome_disciplina": nome_disciplina})
+            conexao.commit()
 
-    def inserir_dados_disciplina(id_disciplina, nome_disciplina):
-        comando = '''INSERT INTO disciplina VALUES (:id_disciplina, :nome_disciplina);'''
-        cursor.execute(comando, {"id_disciplina": id_disciplina, "nome_disciplina": nome_disciplina})
-        conexao.commit()
-
-    def inserir_dados_resultado(aluno_id, disciplina_id, nota1, nota2, nota3, media):
-        comando = '''INSERT INTO resultados VALUES (:id_aluno, :id_disciplina, :nota1, :nota2, :nota3, :media);'''
-        cursor.execute(comando, {"aluno_id": aluno_id, "disciplina_id": disciplina_id, "nota1": nota1, "nota2": nota2, "nota3": nota3, "media": media})
-        conexao.commit()
+        def inserir_dados_resultado(aluno_id, disciplina_id, nota1, nota2, nota3, media):
+            comando = '''INSERT INTO resultados VALUES (:id_aluno, :id_disciplina, :nota1, :nota2, :nota3, :media);'''
+            cursor.execute(comando, {"aluno_id": aluno_id, "disciplina_id": disciplina_id, "nota1": nota1, "nota2": nota2, "nota3": nota3, "media": media})
+            conexao.commit()
+    except Exception as erro:
+        print("Erro em salvar(banco de dados):",erro)
 
 class ExcluirNoBanco:
-    def excluir_dados_aluno(id_aluno):
-        comando = '''DELETE FROM aluno WHERE id_aluno = :id_aluno;'''
-        cursor.execute(comando, {"id_aluno": id_aluno})
-        conexao.commit()
+    try:
+        def excluir_dados_aluno(id_aluno):
+            comando = '''DELETE FROM aluno WHERE id_aluno = :id_aluno;'''
+            cursor.execute(comando, {"id_aluno": id_aluno})
+            conexao.commit()
 
-    def excluir_dados_disciplinas(id_disciplina):
-        comando = '''DELETE FROM disciplina WHERE id_disciplina = :id_disciplina;'''
-        cursor.execute(comando, {"id_disciplina": id_disciplina})
-        conexao.commit()
+        def excluir_dados_disciplinas(id_disciplina):
+            comando = '''DELETE FROM disciplina WHERE id_disciplina = :id_disciplina;'''
+            cursor.execute(comando, {"id_disciplina": id_disciplina})
+            conexao.commit()
 
-    def exluir_dados_resultado(id_aluno):
-        comando = '''DELETE FROM resultados WHERE aluno_id = :aluno_id;'''
-        cursor.execute(comando, {"aluno_id": id_aluno})
-        conexao.commit()
+        def exluir_dados_resultado(id_aluno):
+            comando = '''DELETE FROM resultados WHERE aluno_id = :aluno_id;'''
+            cursor.execute(comando, {"aluno_id": id_aluno})
+            conexao.commit()
+    except Exception as erro:
+        print("Erro em excluir(banco de dados):",erro)
 
 class AlterarNoBanco:
-    def alterar_dados_aluno(id_aluno, nome_aluno):
-        cursor.execute("UPDATE aluno SET nome_aluno = ? WHERE id_aluno = ?", (nome_aluno, id_aluno))
-        conexao.commit()
+    try:
+        def alterar_dados_aluno(id_aluno, nome_aluno):
+            cursor.execute("UPDATE aluno SET nome_aluno = ? WHERE id_aluno = ?", (nome_aluno, id_aluno))
+            conexao.commit()
 
-    def alterar_dados_disciplina(id_disciplina, nome_disciplina):
-        cursor.execute("UPDATE disciplina SET nome_disciplina = ? WHERE id_disciplina = ?", (nome_disciplina, id_disciplina))
-        conexao.commit()
+        def alterar_dados_disciplina(id_disciplina, nome_disciplina):
+            cursor.execute("UPDATE disciplina SET nome_disciplina = ? WHERE id_disciplina = ?", (nome_disciplina, id_disciplina))
+            conexao.commit()
 
-    def alterar_dados_resultado(id_aluno, nota1, nota2, nota3, media):
-        cursor.execute("UPDATE resultado SET nota1, nota2, nota3, media = ? WHERE id_aluno = ?", (nota1, nota2, nota3, media, id_aluno))
-        conexao.commit()
-    
+        def alterar_dados_resultado(id_aluno, nota1, nota2, nota3, media):
+            cursor.execute("UPDATE resultado SET nota1, nota2, nota3, media = ? WHERE id_aluno = ?", (nota1, nota2, nota3, media, id_aluno))
+            conexao.commit()
+    except Exception as erro:
+        print("Erro em alterar dados(banco de dados):",erro)
+
 class BancoDeDados:
     def todos_os_alunos():
         try:
