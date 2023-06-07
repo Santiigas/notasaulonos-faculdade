@@ -1,0 +1,2 @@
+>>> Lista de todos as disciplinas:
+ID: 1354 | Disciplina: Literatura

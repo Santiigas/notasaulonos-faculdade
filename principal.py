@@ -39,11 +39,8 @@ def PegarDadosAlunos(parametro):
             nome = str(entrada_nome_aluno.get())
             matricula = str(entrada_nome_matricula.get())
             if len(nome) > 0 and nome.isalpha():
-                if len(matricula) > 0:
-                    SalvarNoBanco.inserir_dados_aluno(nome, int(matricula), id_aluno)
-                    mensagem['text'] = 'Dados inseridos com sucesso!'
-                else:
-                    mensagem['text'] = 'Matricula invalida! Tente novamente'
+                SalvarNoBanco.inserir_dados_aluno(nome, int(matricula), id_aluno)
+                mensagem['text'] = 'Dados inseridos com sucesso!'
             else:
                 mensagem['text'] = 'Nome invalido! Tente novamente'
 
@@ -53,11 +50,8 @@ def PegarDadosAlunos(parametro):
             id_aluno = str(entrada_id_aluno.get())
             if len(nome) > 0 and nome.isalpha():
                 if len(id_aluno) == 8:
-                    if len(matricula) > 0:
-                        AlterarNoBanco.alterar_dados_aluno(int(id_aluno), nome, matricula)
-                        mensagem['text'] = 'Dados alterados com sucesso!'
-                    else:
-                        mensagem['text'] = 'Matricula invalida! Tente novamente'
+                    AlterarNoBanco.alterar_dados_aluno(int(id_aluno), nome, matricula)
+                    mensagem['text'] = 'Dados alterados com sucesso!'
                 else:
                     mensagem['text'] = 'Id do aluno invalido! Tente novamente'
             else:
@@ -80,7 +74,6 @@ def PegarDadosDisciplina(parametro):
             disciplina = str(entrada_disciplina.get())
             if len(disciplina) > 0 and disciplina.isalpha():
                 SalvarNoBanco.inserir_dados_disciplina(id_disciplina, disciplina)
-                mensagem['text'] = 'Dados inseridos com sucesso!' 
             else:
                 mensagem['text'] = 'Matricula! Tente novamente'
 
@@ -90,7 +83,6 @@ def PegarDadosDisciplina(parametro):
             if len(disciplina) > 0 and disciplina.isalpha():
                 if len(id_disciplina) == 6:
                     AlterarNoBanco.alterar_dados_disciplina(int(id_disciplina), disciplina)
-                    mensagem['text'] = 'Dados alterados com sucesso!'
                 else:
                     mensagem['text'] = 'Id da disciplina invalido! Tente novamente'
             else:
@@ -100,7 +92,6 @@ def PegarDadosDisciplina(parametro):
             id_disciplina = str(entrada_id_disciplina.get())
             if len(id_disciplina) == 6:
                 ExcluirNoBanco.excluir_dados_disciplinas(int(id_disciplina))
-                mensagem['text'] = 'Dados deletados com sucesso!'
             else:
                 mensagem['text'] = 'Id da disciplina invalida! Tente novamente!'
     except Exception as erro:

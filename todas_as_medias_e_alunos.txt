@@ -1,0 +1,2 @@
+>>> Lista de todos os alunos e suas medias:
+Aluno: Breno | Media: 10.0

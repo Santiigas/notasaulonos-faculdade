@@ -1,3 +1,3 @@
 >>> Lista de todos os alunos:
-Id: 22710234 | Aluno: Reto | Matricula: 666
+Id: 34246800 | Aluno: Breno | Matricula: 555555
 Id: 53241890 | Aluno: Dokas | Matricula: 77777
