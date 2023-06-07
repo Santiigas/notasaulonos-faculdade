@@ -30,6 +30,8 @@ def CriarBancoDeDados():
     except Exception as erro:
         print("Erro na criacão do banco:",erro)
 
+CriarBancoDeDados()
+
 def PegarDadosAlunos(parametro):
     try:
         if parametro == 1:
