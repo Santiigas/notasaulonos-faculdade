@@ -1,6 +1,3 @@
 >>> Lista de todos os alunos:
-Id: 6666 | Aluno: Santiago | Matricula: 666666666
-Id: 30540425 | Aluno: Doka | Matricula: 56485666
-Id: 43212086 | Aluno: Alef | Matricula: 2424
-Id: 50148857 | Aluno: Matue | Matricula: 56485666
-Id: 94305458 | Aluno: Raffa | Matricula: 87897
+Id: 22710234 | Aluno: Reto | Matricula: 666
+Id: 53241890 | Aluno: Dokas | Matricula: 77777

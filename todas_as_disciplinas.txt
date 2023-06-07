@@ -1,5 +1,0 @@
->>> Lista de todos as disciplinas:
-ID: 54479 | Disciplina: Valorant
-ID: 311170 | Disciplina: Python
-ID: 365098 | Disciplina: Historia
-ID: 471283 | Disciplina: Portuges

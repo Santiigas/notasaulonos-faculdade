@@ -8,7 +8,6 @@ conexao = conector.connect('C:/Users/Usuario/Documents/teste/meubanco100.db')
 cursor = conexao.cursor()
 
 lista_disciplinas = ["Português", "História", "Biologia", "Literatura", "Química", "Matemática", "Física", "Inglês", "Espanhol" ]
-motivo = ["Trancamento", "Transferência interna", "Transferência externa"]
 
 def CriarBancoDeDados():
     try:
@@ -36,10 +35,13 @@ def PegarDadosAlunos(parametro):
         if parametro == 1:
             id_aluno = ''.join(random.choices(string.digits, k=8))
             nome = str(entrada_nome_aluno.get())
-            matricula = int(entrada_nome_matricula.get())
+            matricula = str(entrada_nome_matricula.get())
             if len(nome) > 0 and nome.isalpha():
-                SalvarNoBanco.inserir_dados_aluno(nome, matricula, id_aluno)
-                mensagem['text'] = 'Dados inseridos com sucesso!' 
+                if len(matricula) > 0:
+                    SalvarNoBanco.inserir_dados_aluno(nome, int(matricula), id_aluno)
+                    mensagem['text'] = 'Dados inseridos com sucesso!'
+                else:
+                    mensagem['text'] = 'Matricula invalida! Tente novamente'
             else:
                 mensagem['text'] = 'Nome invalido! Tente novamente'
 
@@ -49,8 +51,11 @@ def PegarDadosAlunos(parametro):
             id_aluno = str(entrada_id_aluno.get())
             if len(nome) > 0 and nome.isalpha():
                 if len(id_aluno) == 8:
-                    AlterarNoBanco.alterar_dados_aluno(int(id_aluno), nome)
-                    mensagem['text'] = 'Dados alterados com sucesso!'
+                    if len(matricula) > 0:
+                        AlterarNoBanco.alterar_dados_aluno(int(id_aluno), nome, matricula)
+                        mensagem['text'] = 'Dados alterados com sucesso!'
+                    else:
+                        mensagem['text'] = 'Matricula invalida! Tente novamente'
                 else:
                     mensagem['text'] = 'Id do aluno invalido! Tente novamente'
             else:
@@ -87,7 +92,7 @@ def PegarDadosDisciplina(parametro):
                 else:
                     mensagem['text'] = 'Id da disciplina invalido! Tente novamente'
             else:
-                mensagem['text'] = 'Nova disciplina invalido! Tente novamente'
+                mensagem['text'] = 'Nova disciplina invalida! Tente novamente'
 
         elif parametro == 3:
             id_disciplina = str(entrada_id_disciplina.get())
@@ -95,7 +100,7 @@ def PegarDadosDisciplina(parametro):
                 ExcluirNoBanco.excluir_dados_disciplinas(int(id_disciplina))
                 mensagem['text'] = 'Dados deletados com sucesso!'
             else:
-                mensagem['text'] = 'Id da disciplina invalido! Tente novamente!'
+                mensagem['text'] = 'Id da disciplina invalida! Tente novamente!'
     except Exception as erro:
         print("Erro na coleta de dados(disciplina):",erro)
 
@@ -104,14 +109,19 @@ def PegarDadosResultado(parametro):
         if parametro == 1:
             id_aluno = str(entrada_id_aluno_resultado.get())
             id_disciplina = str(entrada_id_disciplina_resultado.get())
-            nota1 = str(entrada_nota1.get())
-            nota2 = str(entrada_nota2.get())
-            nota3 = str(entrada_nota3.get())
-            media = 6666
+            nota1 = float(entrada_nota1.get())
+            nota2 = float(entrada_nota2.get())
+            nota3 = float(entrada_nota3.get())
+            media = ((nota1 + nota2 + nota3) / 3)
             if len(id_aluno) == 8:
                 if len(id_disciplina) == 6:
-                    SalvarNoBanco.inserir_dados_resultado(int(id_aluno), int(id_disciplina), float(nota1), float(nota2), float(nota3), float(media))
-                    mensagem['text'] = 'Dados inseridos com sucesso!' 
+                    if nota1 <= 10 and nota2 <= 10 and nota3 <= 10:
+                        SalvarNoBanco.inserir_dados_resultado(int(id_aluno), int(id_disciplina), nota1, nota2, nota3, media)
+                        mensagem['text'] = 'Dados inseridos com sucesso!' 
+                    else:
+                        mensagem['text'] = 'Notas invalidas! Tente novamente!'
+                else:
+                    mensagem['text'] = 'Id disiciplina invalido! Tente novamente'
             else:
                 mensagem['text'] = 'Id aluno invalido! Tente novamente'
         elif parametro == 2:
@@ -121,8 +131,11 @@ def PegarDadosResultado(parametro):
             nota3 = float(entrada_nota3.get())
             media = (nota1 + nota2 + nota3) / 3
             if len(id_aluno) == 8:
+                if nota1 <= 10 and nota2 <= 10 and nota3 <= 10:
                     AlterarNoBanco.alterar_dados_resultado(int(id_aluno), nota1, nota2, nota3, media)
                     mensagem['text'] = 'Dados atualizados com sucesso!' 
+                else:
+                    mensagem['text'] = 'Notas invalidas! Tente novamente'
             else:
                 mensagem['text'] = 'Id aluno invalido! Tente novamente'
         elif parametro == 3:
@@ -131,7 +144,7 @@ def PegarDadosResultado(parametro):
                 ExcluirNoBanco.exluir_dados_resultado(int(id_aluno))
                 mensagem['text'] = 'Dados deletados com sucesso!'
             else:
-                mensagem['text'] = 'Id do aluno erado! Tente novamente!'
+                mensagem['text'] = 'Id do aluno errado! Tente novamente!'
     except Exception as erro:
         print("Erro na coleta de dados(resultado):",erro)
 
@@ -190,9 +203,9 @@ class SalvarNoBanco:
             cursor.execute(comando, {"id_disciplina": id_disciplina, "nome_disciplina": nome_disciplina})
             conexao.commit()
 
-        def inserir_dados_resultado(aluno_id, disciplina_id, nota1, nota2, nota3, media):
-            comando = '''INSERT INTO resultados VALUES (:id_aluno, :id_disciplina, :nota1, :nota2, :nota3, :media);'''
-            cursor.execute(comando, {"aluno_id": aluno_id, "disciplina_id": disciplina_id, "nota1": nota1, "nota2": nota2, "nota3": nota3, "media": media})
+        def inserir_dados_resultado(id_aluno, id_disciplina, nota1, nota2, nota3, media):
+            comando = '''INSERT INTO resultados VALUES (:aluno_id, :disciplina_id, :nota1, :nota2, :nota3, :media);'''
+            cursor.execute(comando, {"aluno_id": id_aluno, "disciplina_id": id_disciplina, "nota1": nota1, "nota2": nota2, "nota3": nota3, "media": media})
             conexao.commit()
     except Exception as erro:
         print("Erro em salvar(banco de dados):",erro)
@@ -218,17 +231,18 @@ class ExcluirNoBanco:
 
 class AlterarNoBanco:
     try:
-        def alterar_dados_aluno(id_aluno, nome_aluno):
-            cursor.execute("UPDATE aluno SET nome_aluno = ? WHERE id_aluno = ?", (nome_aluno, id_aluno))
+        def alterar_dados_aluno(id_aluno, nome_aluno, matricula):
+            cursor.execute("UPDATE aluno SET nome_aluno = ?, matricula = ? WHERE id_aluno = ?", (nome_aluno, matricula, id_aluno))
             conexao.commit()
 
         def alterar_dados_disciplina(id_disciplina, nome_disciplina):
             cursor.execute("UPDATE disciplina SET nome_disciplina = ? WHERE id_disciplina = ?", (nome_disciplina, id_disciplina))
             conexao.commit()
 
-        def alterar_dados_resultado(id_aluno, nota1, nota2, nota3, media):
-            cursor.execute("UPDATE resultado SET nota1, nota2, nota3, media = ? WHERE id_aluno = ?", (nota1, nota2, nota3, media, id_aluno))
+        def alterar_dados_resultado(aluno_id, nota1, nota2, nota3, media):
+            cursor.execute("UPDATE resultados SET nota1 = ?, nota2 = ?, nota3 = ?, media = ? WHERE aluno_id = ?", (nota1, nota2, nota3, media, aluno_id))
             conexao.commit()
+
     except Exception as erro:
         print("Erro em alterar dados(banco de dados):",erro)
 
@@ -238,7 +252,7 @@ class BancoDeDados:
             cursor.execute("SELECT id_aluno, nome_aluno, matricula FROM aluno;")
             selecao_resultado = cursor.fetchall()
             if not selecao_resultado:
-                print(">>> Não há dados de alunos a serem visualizados!")
+                mensagem2['text'] = 'Não há dados a serem visualizados'
             else:
                 '''O banco de dados retorna uma lista com varias tuplas.
                 Cada tupla contem o nome de um aluno.
@@ -252,7 +266,7 @@ class BancoDeDados:
                     id_aluno, aluno, matricula = dado
                     arquivo.write(f"Id: {id_aluno} | Aluno: {aluno} | Matricula: {matricula}")
                     arquivo.write("\n")
-                arquivo.close()        
+                arquivo.close()
         except Exception as erro:
             print("Erro na consulta: Alunos:",erro)
     def todos_as_disciplinas():
@@ -260,7 +274,7 @@ class BancoDeDados:
             cursor.execute("SELECT id_disciplina, nome_disciplina FROM disciplina;")
             selecao_resultado = cursor.fetchall()
             if not selecao_resultado:
-                print(">>> Não há dados de disciplinas a serem visualizados!")
+                mensagem2['text'] = 'Não há dados a serem visualizados'
             else:
                 arquivo = open("todas_as_disciplinas.txt","w")
                 arquivo.write(">>> Lista de todos as disciplinas:\n")
@@ -275,10 +289,10 @@ class BancoDeDados:
         try:
             cursor.execute("SELECT aluno.nome_aluno, resultados.media "
                         "FROM aluno JOIN resultados "
-                        "ON aluno.matricula = resultados.aluno_id ")
+                        "ON aluno.id_aluno = resultados.aluno_id ")
             selecao_resultado = cursor.fetchall()
             if not selecao_resultado:
-                print(">>> Não há dados de alunos e médias a serem visualizados!")
+                mensagem2['text'] = 'Não há dados a serem visualizados'
             else:
                 arquivo = open("todas_as_medias_e_alunos.txt","w")
                 arquivo.write(">>> Lista de todos os alunos e suas medias:\n")
@@ -293,7 +307,6 @@ class BancoDeDados:
 #criação da janela
 janela = Tk()
 janela.title("Laçamento de notas de alunos")
-#master.iconbitmap(default="icone.ico")
 janela.geometry("1100x550+155+70")
 janela.wm_resizable(width=False, height=False)
 
@@ -329,7 +342,7 @@ botao1.place(width=70, height=33, x=244, y=232)
 #Disciplinas ------------------------------------
 
 #Entradas
-entrada_disciplina = Entry(janela, justify=LEFT)
+entrada_disciplina = ttk.Combobox(janela, values=lista_disciplinas)
 entrada_disciplina.place(width=232, height=22, x=462, y=120)
 
 entrada_id_disciplina = Entry(janela, justify=LEFT)
@@ -389,6 +402,32 @@ botao_consultar_medias.place(width=232, height=32, x=72, y=440)
 mensagem = Label(janela, text='', font="Arial 17", relief='flat', fg='#020304', bg='#ededed')
 mensagem.place(width=500, height=25, x=500, y=380)
 
+mensagem2 = Label(janela, text='', font="Arial 17", relief='flat', fg='#020304', bg='#ededed')
+mensagem2.place(width=500, height=25, x=500, y=410)
+
 janela.mainloop()
 cursor.close()
 conexao.close()
+
+''''
+Alguns comentários sobre o código:
+Fiz as alterações que o senhor me falou na última aula, agora é possível adicionar, 
+alterar e excluir todos os valores de todas as tabelas:
+
+O projeto até o momento está funcionando bem nos testes que fiz, 
+porém pensei em algumas melhorias, não implementei pois fiquei corrigindo o 
+código e o por conta do trabalho, pouco tempo.
+
+Pendencias: 
+Excluir a criação de arquivos para mostrar na tela, visto que não é necessário a criação dos mesmos.
+
+Para fazer uma alteração é necessário digitar o id correspondente da tabela.
+O usuário pode obter esses ids pelas consultas, mas o trabalho fica um pouco chato, 
+visto que você teria que copiar e colar para alterar. Pensei em fazer um dicionário para 
+mostrar todos os nomes dos alunos, ao clicar aparecida o id no campo e realizaria a exclusão/alteração.
+
+A orientação a objetos também não está boa, falta iniciar as variáveis entre outras coisas. 
+POO ainda não dominei muito bem.
+
+Fiquei devendo a modularização do código, visto que ficaria mais fácil realizar alterações.
+'''
