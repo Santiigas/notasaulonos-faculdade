@@ -1,3 +1,5 @@
 >>> Lista de todos os alunos:
 Id: 34246800 | Aluno: Breno | Matricula: 555555
+Id: 51770581 | Aluno: Endoscopia | Matricula: 101010
+Id: 52761497 | Aluno: Santiago | Matricula: 65987452
 Id: 53241890 | Aluno: Dokas | Matricula: 77777

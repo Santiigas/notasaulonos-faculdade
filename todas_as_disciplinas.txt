@@ -1,2 +1,12 @@
 >>> Lista de todos as disciplinas:
 ID: 1354 | Disciplina: Literatura
+ID: 214340 | Disciplina: jjjjjj
+ID: 269333 | Disciplina: jjjjjj
+ID: 272282 | Disciplina: Inglês
+ID: 413906 | Disciplina: Inglês
+ID: 536480 | Disciplina: jjjjjj
+ID: 587932 | Disciplina: jjjjjj
+ID: 594817 | Disciplina: Inglês
+ID: 783050 | Disciplina: Inglês
+ID: 802206 | Disciplina: Inglês
+ID: 845856 | Disciplina: Inglês
